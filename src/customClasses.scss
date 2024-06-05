@@ -1,0 +1,171 @@
+$dimensions: (
+    "smll-1": 0.5em,
+    "smll-2": 0.75em,
+    "smll-3": 1em,
+    "smll-4": 1.25em,
+    "smll-5": 1.5em,
+    "smll-6": 1.75em,
+    "mdd-1": 2em,
+    "mdd-2": 2.25em,
+    "mdd-3": 2.5em,
+    "mdd-4": 2.75em,
+    "mdd-5": 3em,
+    "mdd-6": 3.25em,
+    "lgg-1": 3.5em,
+    "lgg-2": 3.75em,
+    "lgg-3": 4em,
+    "lgg-4": 4.25em,
+    "lgg-5": 4.5em,
+    "lgg-6": 4.75em,
+    "xll-1": 5em,
+    "xll-2": 5.25em,
+    "xll-3": 5.5em,
+    "xll-4": 5.75em,
+    "xll-5": 6em,
+    "xll-6": 6.25em,
+    "xxll-1": 6.5em,
+    "xxll-2": 6.75em,
+    "xxll-3": 7em,
+    "xxll-4": 7.25em,
+    "xxll-5": 7.5em,
+    "xxll-6": 7.75em,
+    "xxll-7": 8em,
+    "xxll-8": 8.5em,
+    "xxll-9": 9em,
+    "xxll-10": 9.5em,
+);
+
+// Margins
+@each $name, $size in $dimensions {
+    .m-#{$name} {
+        margin: $size;
+    }
+
+    .mb-#{$name} {
+        margin-block: $size;
+    }
+    .mb-start-#{$name} {
+        margin-block-start: $size;
+    }
+    .mb-end-#{$name} {
+        margin-block-end: $size;
+    }
+
+    .mil-#{$name} {
+        margin-inline: $size;
+    }
+    .mil-start-#{$name} {
+        margin-inline-start: $size;
+    }
+    .mil-end-#{$name} {
+        margin-inline-end: $size;
+    }
+}
+
+// Paddings
+@each $name, $size in $dimensions {
+    .p-#{$name} {
+        padding: $size;
+    }
+    .pb-#{$name} {
+        padding-block: $size;
+    }
+    .pb-start-#{$name} {
+        padding-block-start: $size;
+    }
+    .pb-end-#{$name} {
+        padding-block-end: $size;
+    }
+    .pi-#{$name} {
+        padding-inline: $size;
+    }
+    .pi-start-#{$name} {
+        padding-inline-start: $size;
+    }
+    .pi-end-#{$name} {
+        padding-inline-end: $size;
+    }
+}
+
+// Font Size
+$font-sizes: (
+    "tiny": 0.75rem,
+    "small": 0.875rem,
+    "base": 1rem,
+    "large": 1.25rem,
+    "xl": 1.5rem,
+    "2xl": 2rem,
+    "3xl": 2.5rem,
+    "4xl": 3rem,
+    "5xl": 4rem,
+    "6xl": 5rem,
+    "7xl": 6rem,
+    "8xl": 7rem,
+);
+
+@each $name, $size in $font-sizes {
+    .size-#{$name} {
+        font-size: $size;
+    }
+}
+
+$colors: (
+    "blue": #007bff,
+    "grey": #e6e6e6,
+    "green": #28a745,
+    "red": #dc3545,
+    "yellow": #ffc107,
+    "l-blue": #17a2b8,
+    "white": #f8f9fa,
+    "black": #343a40,
+);
+
+// Colori di Sfondo
+@each $name, $color in $colors {
+    .bg-#{$name} {
+        background-color: $color;
+    }
+}
+
+// Colori del Testo
+@each $name, $color in $colors {
+    .text-#{$name} {
+        color: $color;
+    }
+}
+
+$border-sizes: (
+    "1": 1px,
+    "2": 2px,
+    "3": 3px,
+    "4": 4px,
+    "5": 5px,
+);
+
+// Bordi
+@each $name, $size in $border-sizes {
+    .b-#{$name} {
+        border: $size solid;
+    }
+    .bt-#{$name} {
+        border-top: $size solid;
+    }
+    .br-#{$name} {
+        border-right: $size solid;
+    }
+    .bb-#{$name} {
+        border-bottom: $size solid;
+    }
+    .bl-#{$name} {
+        border-left: $size solid;
+    }
+}
+
+// Per impostare il colore del bordo, si può combinare con le utilities dei colori
+@each $colorName, $colorValue in $colors {
+    @each $borderName, $borderSize in $border-sizes {
+        .b-#{$colorName}-#{$borderName} {
+            border: $borderSize solid $colorValue;
+        }
+    }
+}
