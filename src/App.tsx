@@ -3,17 +3,19 @@ import "./customClasses.scss";
 import "./index.scss";
 import "./App.scss";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import MainComp from "./components/MAIN/MainComp";
+import HomePage from "./components/MAIN/HomePage";
+import NavBarComp from "./components/MAIN/NavBarComp";
 
 function App() {
     return (
-        <div>
+        <>
             <BrowserRouter>
+                <NavBarComp />
                 <Routes>
-                    <Route path="/" element={<MainComp />} />
+                    <Route path="/" element={<HomePage />} />
                 </Routes>
             </BrowserRouter>
-        </div>
+        </>
     );
 }
 
