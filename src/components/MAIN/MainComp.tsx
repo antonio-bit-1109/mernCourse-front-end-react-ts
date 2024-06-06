@@ -1,5 +1,9 @@
 const MainComp = () => {
-    return <div>MainComp</div>;
+    return (
+        <div>
+            <p>main comp</p>
+        </div>
+    );
 };
 
 export default MainComp;
