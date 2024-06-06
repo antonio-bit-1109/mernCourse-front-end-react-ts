@@ -1,13 +1,13 @@
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 import { Form } from "react-bootstrap";
 
 const LoginComponent = () => {
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm();
+    //  const {
+    //      register,
+    //      handleSubmit,
+    //      watch,
+    //      formState: { errors },
+    //  } = useForm();
 
     return (
         <>
