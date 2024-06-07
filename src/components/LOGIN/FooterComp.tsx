@@ -1,7 +1,13 @@
 import { Col, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../redux/store";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const FooterComp = () => {
+    const UserToken = useSelector((store: RootState) => store.token.token);
+    const [decodedToken, setDecodedToken] = useState<any>(null);
     const navigate = useNavigate();
 
     const date = new Date();
@@ -11,6 +17,25 @@ const FooterComp = () => {
 
     const hours = date.getHours();
     const minutes = date.getMinutes();
+
+    useEffect(() => {
+        if (UserToken) {
+            const tokenDecripted = jwtDecode(UserToken);
+            console.log(tokenDecripted);
+            setDecodedToken(tokenDecripted);
+        }
+    }, [UserToken]);
+
+    const renderStatus = (token) => {
+        if (token.isActive) {
+            return "Attivo";
+        }
+        if (token.isActive !== false) {
+            return "Inattivo";
+        }
+
+        return null;
+    };
 
     return (
         <div className="sticky-bottom">
@@ -24,8 +49,13 @@ const FooterComp = () => {
                         </div>
 
                         <div>
-                            <p>Current User:</p>
-                            <p>Status:</p>
+                            <p>
+                                Current User: <span className="fw-bold fs-5">{decodedToken && decodedToken.name}</span>
+                            </p>
+                            <p>
+                                Status:{" "}
+                                <span className="fw-bold fs-5">{decodedToken && renderStatus(decodedToken)}</span>
+                            </p>
                         </div>
                     </footer>
                 </Col>

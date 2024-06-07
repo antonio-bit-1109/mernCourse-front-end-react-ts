@@ -1,8 +1,21 @@
-import React from "react";
-import { Col, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { Form } from "react-bootstrap";
+import { useAutenticationMutation } from "../../redux/fetches/tokenApi";
+import React, { useState } from "react";
 
 const LoginInputs = () => {
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+
+    const [autenticate] = useAutenticationMutation();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await autenticate({ usernameBody: username, passwordBody: password });
+        setUsername("");
+        setPassword("");
+    };
+
     return (
         <Row className="justify-content-center">
             <Col xs="12">
@@ -11,15 +24,31 @@ const LoginInputs = () => {
                 </div>
             </Col>
             <Col xs="11" md="6" xl="5">
-                <Form>
+                <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="nomeUtenteId">
                         <Form.Label>userName</Form.Label>
-                        <Form.Control type="text" placeholder="inserisci nome utente" />
+                        <Form.Control
+                            value={username}
+                            onChange={(e) => {
+                                setUsername(e.target.value);
+                            }}
+                            type="text"
+                            placeholder="inserisci nome utente"
+                        />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="passwordId">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="inserisci password" />
+                        <Form.Control
+                            value={password}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                            }}
+                            type="password"
+                            placeholder="inserisci password"
+                        />
                     </Form.Group>
+                    <hr />
+                    <Button type="submit"> Log In </Button>
                 </Form>
             </Col>{" "}
         </Row>
