@@ -13,6 +13,7 @@ import VIsualizzaNote from "./components/LOGIN/VIsualizzaNote";
 import UserSettings from "./components/LOGIN/UserSettings";
 import LoginInputs from "./components/LOGIN/LoginInputs";
 import ImagesComp from "./components/MAIN/ImagesComp";
+import AllUsersComp from "./components/USERS/fetchAllUsers";
 
 function App() {
     return (
@@ -23,12 +24,12 @@ function App() {
                     <Route index element={<MainPartComp />} />
                     <Route path="images" element={<ImagesComp />} />
                 </Route>
-
                 <Route path="/login" element={<LoginComponent />}>
                     <Route index element={<LoginInputs />} />
                     <Route path="notes" element={<VIsualizzaNote />} />
                     <Route path="UserSettings" element={<UserSettings />} />
-                </Route>
+                </Route>{" "}
+                <Route path="/allUsers" element={<AllUsersComp />} />
             </Routes>
         </BrowserRouter>
     );

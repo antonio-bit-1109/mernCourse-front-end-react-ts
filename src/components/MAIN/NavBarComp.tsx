@@ -31,6 +31,14 @@ const NavBarComp = () => {
                         >
                             Home
                         </p>
+                        <p
+                            onClick={() => {
+                                navigate("/AllUsers");
+                            }}
+                            className=" text-light m-0"
+                        >
+                            Get all users
+                        </p>
                     </div>
                 </Container>
             </Navbar>
