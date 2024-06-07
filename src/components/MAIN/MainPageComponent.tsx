@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
 import Header from "./Header";
-import FooterComp from "./FooterComp";
 import { Outlet } from "react-router-dom";
+import FooterMain from "./FooterMain";
 
 const MainPageComponent = () => {
     return (
@@ -14,7 +14,7 @@ const MainPageComponent = () => {
                 {/* <MainPartComp /> */}
             </Container>
             <Container fluid>
-                <FooterComp />
+                <FooterMain />
             </Container>
         </div>
     );

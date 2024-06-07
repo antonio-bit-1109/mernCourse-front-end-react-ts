@@ -24,16 +24,6 @@ const FooterComp = () => {
                         </div>
 
                         <div>
-                            <p
-                                onClick={() => {
-                                    navigate("/login");
-                                }}
-                            >
-                                vai al login
-                            </p>
-                        </div>
-
-                        <div>
                             <p>Current User:</p>
                             <p>Status:</p>
                         </div>

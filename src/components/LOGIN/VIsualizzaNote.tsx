@@ -1,5 +1,5 @@
 const VIsualizzaNote = () => {
-    return <> visualizzaNOte</>;
+    return <div> visualizzaNOte</div>;
 };
 
 export default VIsualizzaNote;

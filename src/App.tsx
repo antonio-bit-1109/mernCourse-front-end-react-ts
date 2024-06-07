@@ -7,10 +7,12 @@ import NavBarComp from "./components/MAIN/NavBarComp";
 import MainPageComponent from "./components/MAIN/MainPageComponent";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LoginComponent from "./components/MAIN/LoginComponent";
+import LoginComponent from "./components/LOGIN/LoginComponent";
 import MainPartComp from "./components/MAIN/MainPartComp";
-import VIsualizzaNote from "./components/MAIN/VIsualizzaNote";
-import UserSettings from "./components/MAIN/UserSettings";
+import VIsualizzaNote from "./components/LOGIN/VIsualizzaNote";
+import UserSettings from "./components/LOGIN/UserSettings";
+import LoginInputs from "./components/LOGIN/LoginInputs";
+import ImagesComp from "./components/MAIN/ImagesComp";
 
 function App() {
     return (
@@ -19,7 +21,11 @@ function App() {
             <Routes>
                 <Route path="/" element={<MainPageComponent />}>
                     <Route index element={<MainPartComp />} />
-                    <Route path="login" element={<LoginComponent />} />
+                    <Route path="images" element={<ImagesComp />} />
+                </Route>
+
+                <Route path="/login" element={<LoginComponent />}>
+                    <Route index element={<LoginInputs />} />
                     <Route path="notes" element={<VIsualizzaNote />} />
                     <Route path="UserSettings" element={<UserSettings />} />
                 </Route>

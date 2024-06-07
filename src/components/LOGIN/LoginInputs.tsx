@@ -1,14 +1,8 @@
-// import { useForm } from "react-hook-form";
-import { Col, Form, Row } from "react-bootstrap";
+import React from "react";
+import { Col, Row } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
-const LoginComponent = () => {
-    //  const {
-    //      register,
-    //      handleSubmit,
-    //      watch,
-    //      formState: { errors },
-    //  } = useForm();
-
+const LoginInputs = () => {
     return (
         <Row className="justify-content-center">
             <Col xs="12">
@@ -32,4 +26,4 @@ const LoginComponent = () => {
     );
 };
 
-export default LoginComponent;
+export default LoginInputs;
