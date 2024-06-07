@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useGetAllUsersQuery } from "../../redux/usersApi";
+import { useGetAllUsersQuery } from "../../redux/fetches/usersApi";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
