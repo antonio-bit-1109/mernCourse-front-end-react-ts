@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 
 const FooterComp = () => {
     const UserToken = useSelector((store: RootState) => store.token.token);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [decodedToken, setDecodedToken] = useState<any>(null);
     const navigate = useNavigate();
 
@@ -26,7 +27,8 @@ const FooterComp = () => {
         }
     }, [UserToken]);
 
-    const renderStatus = (token) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const renderStatus = (token: any) => {
         if (token.isActive) {
             return "Attivo";
         }
