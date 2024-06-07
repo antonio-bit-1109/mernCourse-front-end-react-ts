@@ -1,1 +1,1 @@
-export const LocalHostPath: string = "https://localhost:3500";
+export const LocalHostPath: string = "http://localhost:3500";
