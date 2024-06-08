@@ -8,13 +8,13 @@ const LoginInputs = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    const [autenticate, { data: token, isLoading, error }] = useAutenticationMutation();
+    const [autenticate, { data: token, isLoading, error, status }] = useAutenticationMutation();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await autenticate({ usernameBody: username, passwordBody: password });
-        setUsername("");
-        setPassword("");
+        autenticate({ usernameBody: username, passwordBody: password });
+        // setUsername("");
+        // setPassword("");
     };
 
     return (
