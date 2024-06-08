@@ -1,15 +1,81 @@
-import { Col } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { useGetSingleUserMutation } from "../../redux/app/api/usersApiSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 const FetchSingleUser = () => {
-    const [fetchSingleUser, { data: users, error, isLoading, refetch }] = useGetSingleUserMutation();
+    const navigate = useNavigate();
+    const { token } = useSelector((store: RootState) => store.token);
+    const [fetchSingleUser, { data: user, error, isLoading }] = useGetSingleUserMutation();
 
-    return (
-        <>
-            <Col>
-                <div>pagina utente </div>
-            </Col>
-        </>
-    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [decodedToken, setDecodedToken] = useState<any>(null);
+
+    useEffect(() => {
+        if (!token) {
+            navigate("/");
+        }
+    }, [navigate, token]);
+
+    useEffect(() => {
+        if (decodedToken) {
+            fetchSingleUser({ id: decodedToken.id });
+        }
+    }, [decodedToken, fetchSingleUser]);
+
+    useEffect(() => {
+        if (token) {
+            const tokenDecripted = jwtDecode(token);
+            console.log(tokenDecripted);
+            setDecodedToken(tokenDecripted);
+        }
+    }, [token]);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error fetching user data.</div>;
+    }
+
+    if (user) {
+        console.log(user);
+        return (
+            <>
+                {user && (
+                    <>
+                        <Card key={user._id}>
+                            <Card.Body>
+                                <Card.Title>{user.username}</Card.Title>
+                                <Card.Text>{user.roles.join(", ")}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                        <div>
+                            <Button
+                                onClick={() => {
+                                    console.log("fai logout");
+                                }}
+                            >
+                                LogOut
+                            </Button>
+                        </div>{" "}
+                        <div>
+                            <Button
+                                onClick={() => {
+                                    console.log("fai logout");
+                                }}
+                            >
+                                controlla note associate a questo utente
+                            </Button>
+                        </div>
+                    </>
+                )}
+            </>
+        );
+    }
 };
 
 export default FetchSingleUser;
