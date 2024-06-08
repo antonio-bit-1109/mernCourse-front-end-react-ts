@@ -1,13 +1,14 @@
 import { Button, Col, Row } from "react-bootstrap";
 import { Form } from "react-bootstrap";
-import { useAutenticationMutation } from "../../redux/fetches/tokenApi";
 import React, { useState } from "react";
+import { useAutenticationMutation } from "../../redux/app/api/tokenApi";
+import EsitoLoginUtente from "./EsitoLoginUtente";
 
 const LoginInputs = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    const [autenticate] = useAutenticationMutation();
+    const [autenticate, { data: token, isLoading, error }] = useAutenticationMutation();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -51,6 +52,8 @@ const LoginInputs = () => {
                     <Button type="submit"> Log In </Button>
                 </Form>
             </Col>{" "}
+            {/* // esito del login */}
+            <EsitoLoginUtente error={error} isLoading={isLoading} />
         </Row>
     );
 };

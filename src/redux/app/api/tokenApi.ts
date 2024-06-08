@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { LocalHostPath } from "../../functions/LocalHostPath";
+import { LocalHostPath } from "../../../functions/LocalHostPath";
 //funzione del toolkit per scrivere delle fetch parametriche. e ritornare in automatico le risposte.
 
 // builder.query/mutation< RISPOSTA DELL API   ,   PARAMETRO INVIATO NEL BODY  >
