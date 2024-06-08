@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { UsersApi } from "./fetches/usersApi";
-import { TokenApi } from "./fetches/tokenApi";
-import tokenReducer from "./fetches/traditionalSlices/tokenReducer";
+import { UsersApi } from "./app/api/usersApi";
+import { TokenApi } from "./app/api/tokenApi";
+import tokenReducer from "./app/traditionalSlices/tokenReducer";
 
 export const store = configureStore({
     reducer: {
