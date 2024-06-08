@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { useGetAllUsersQuery } from "../../redux/app/api/usersApi";
+import { useGetAllUsersQuery } from "../../redux/app/api/usersApiSlice";
 
 const AllUsersComp = () => {
     const [isFetchSkipping, setIsFetchSkipping] = useState(true);

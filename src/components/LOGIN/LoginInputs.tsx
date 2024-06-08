@@ -1,7 +1,7 @@
 import { Button, Col, Row } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import React, { useState } from "react";
-import { useAutenticationMutation } from "../../redux/app/api/tokenApi";
+import { useAutenticationMutation } from "../../redux/app/api/tokenApiSlice";
 import EsitoLoginUtente from "./EsitoLoginUtente";
 
 const LoginInputs = () => {

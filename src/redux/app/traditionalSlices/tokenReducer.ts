@@ -1,6 +1,6 @@
 // redux/slices/tokenSlice.ts
 import { createSlice } from "@reduxjs/toolkit";
-import { TokenApi } from "../api/tokenApi";
+import { TokenApi } from "../api/tokenApiSlice";
 
 interface TokenState {
     token: string | null;
