@@ -5,6 +5,7 @@ import tokenReducer from "./app/traditionalSlices/tokenReducer";
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import { NotesApi } from "./app/api/notesApiSlice";
 
 const persistConfig = {
     key: "root",
@@ -18,6 +19,7 @@ export const store = configureStore({
     reducer: {
         [UsersApi.reducerPath]: UsersApi.reducer,
         [TokenApi.reducerPath]: TokenApi.reducer,
+        [NotesApi.reducerPath]: NotesApi.reducer,
         token: persistedReducer,
     },
     middleware: (getDefaultMiddleware) =>
@@ -25,7 +27,10 @@ export const store = configureStore({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
-        }).concat(UsersApi.middleware),
+        })
+            .concat(UsersApi.middleware)
+            .concat(TokenApi.middleware)
+            .concat(NotesApi.middleware),
     devTools: true,
 });
 

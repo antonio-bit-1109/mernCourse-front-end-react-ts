@@ -37,7 +37,7 @@ export interface IDeleteNoteBody {
 }
 // builder.query/mutation< RISPOSTA DELL API   ,   PARAMETRO che si aspetta la query  >
 
-export const UsersApi = createApi({
+export const NotesApi = createApi({
     reducerPath: "NotesApi",
     baseQuery: fetchBaseQuery({ baseUrl: LocalHostPath }),
     endpoints: (builder) => ({
@@ -106,4 +106,4 @@ export const {
     //  useDeleteUserMutation,
     //  useGetSingleUserMutation,
     //  useSoftDeleteUserMutation,
-} = UsersApi;
+} = NotesApi;
