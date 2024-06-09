@@ -53,22 +53,14 @@ const FetchSingleUser = () => {
                                 <Card.Text>{user.roles.join(", ")}</Card.Text>
                             </Card.Body>
                         </Card>
+
                         <div>
                             <Button
                                 onClick={() => {
-                                    console.log("fai logout");
+                                    navigate("/login/notes");
                                 }}
                             >
-                                LogOut
-                            </Button>
-                        </div>{" "}
-                        <div>
-                            <Button
-                                onClick={() => {
-                                    console.log("fai logout");
-                                }}
-                            >
-                                controlla note associate a questo utente
+                                visualizza note
                             </Button>
                         </div>
                     </>
@@ -76,6 +68,8 @@ const FetchSingleUser = () => {
             </>
         );
     }
+
+    return null;
 };
 
 export default FetchSingleUser;

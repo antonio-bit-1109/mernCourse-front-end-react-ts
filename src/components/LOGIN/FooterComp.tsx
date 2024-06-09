@@ -28,11 +28,11 @@ const FooterComp = () => {
     }, [UserToken]);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const renderStatus = (token: any) => {
-        if (token.isActive) {
+    const renderStatus = (decodedToken: any) => {
+        if (decodedToken.isActive) {
             return "Attivo";
         }
-        if (token.isActive !== false) {
+        if (decodedToken.isActive !== false) {
             return "Inattivo";
         }
 
@@ -51,10 +51,14 @@ const FooterComp = () => {
 
                     <div>
                         <p>
-                            Current User: <span className="fw-bold fs-5">{decodedToken && decodedToken.name}</span>
+                            Current User:{" "}
+                            <span className="fw-bold fs-5">{UserToken && decodedToken && decodedToken.name}</span>
                         </p>
                         <p>
-                            Status: <span className="fw-bold fs-5">{decodedToken && renderStatus(decodedToken)}</span>
+                            Status:{" "}
+                            <span className="fw-bold fs-5">
+                                {UserToken && decodedToken && renderStatus(decodedToken)}
+                            </span>
                         </p>
                     </div>
                 </footer>

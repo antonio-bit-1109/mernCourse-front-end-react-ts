@@ -9,7 +9,7 @@ import MainPageComponent from "./components/MAIN/MainPageComponent";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginComponent from "./components/LOGIN/LoginComponent";
 import MainPartComp from "./components/MAIN/MainPartComp";
-import VIsualizzaNote from "./components/LOGIN/VIsualizzaNote";
+import VIsualizzaNote from "./components/NOTES/VIsualizzaAllUserNotes";
 import UserSettings from "./components/LOGIN/UserSettings";
 import LoginInputs from "./components/LOGIN/LoginInputs";
 import ImagesComp from "./components/MAIN/ImagesComp";

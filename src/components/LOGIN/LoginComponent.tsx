@@ -3,13 +3,6 @@ import FooterComp from "./FooterComp";
 import { Outlet } from "react-router-dom";
 
 const LoginComponent = () => {
-    //  const {
-    //      register,
-    //      handleSubmit,
-    //      watch,
-    //      formState: { errors },
-    //  } = useForm();
-
     return (
         <>
             <Container>

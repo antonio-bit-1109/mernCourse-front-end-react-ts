@@ -1,8 +1,11 @@
 import { Container, Navbar } from "react-bootstrap";
 import { LocalHostPath } from "../../functions/LocalHostPath";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearToken } from "../../redux/app/traditionalSlices/tokenReducer";
 
 const NavBarComp = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     return (
         <>
@@ -38,6 +41,15 @@ const NavBarComp = () => {
                             className=" text-light m-0"
                         >
                             Get all users
+                        </p>
+                        <p
+                            className="text-light m-0 ms-auto"
+                            onClick={() => {
+                                dispatch(clearToken());
+                                navigate("/login");
+                            }}
+                        >
+                            LogOut
                         </p>
                     </div>
                 </Container>

@@ -1,20 +1,33 @@
 import { Button, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAutenticationMutation } from "../../redux/app/api/tokenApiSlice";
 import EsitoLoginUtente from "./EsitoLoginUtente";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const LoginInputs = () => {
+    const navigate = useNavigate();
+    const UserToken = useSelector((store: RootState) => store.token.token);
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    const [autenticate, { data: token, isLoading, error }] = useAutenticationMutation();
+    const [autenticate, { data: token, isLoading, error, status }] = useAutenticationMutation();
+
+    useEffect(() => {
+        if (UserToken) {
+            navigate("singleUser");
+        }
+    }, [navigate, UserToken]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        autenticate({ usernameBody: username, passwordBody: password });
-        // setUsername("");
-        // setPassword("");
+        await autenticate({ usernameBody: username, passwordBody: password });
+
+        if (status === "fulfilled") {
+            navigate("singleUser");
+        }
     };
 
     return (
