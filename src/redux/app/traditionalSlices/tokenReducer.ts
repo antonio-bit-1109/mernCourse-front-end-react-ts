@@ -18,6 +18,10 @@ export const tokenSlice = createSlice({
             state.token = null;
         },
     },
+
+    //-- matchfulfilled : ogni volta che la fetch autentication ritorna un valore di fulfilled quindi di riuscita, ,salva quel payload nello state specificato nella funzione
+    //-- matchPending : ogni volta che la fetch autentication ritorna un valore attesa di risultato ,salva quel payload nello state specificato nella funzione
+    //-- matchRejected : ogni volta che la fetch autentication ritorna un valore di rejected quindi di errore nella maggior parte dei casi ,salva quel payload nello state specificato nella funzione
     extraReducers: (builder) => {
         builder.addMatcher(TokenApi.endpoints.Autentication.matchFulfilled, (state, { payload }) => {
             state.token = payload.token;
