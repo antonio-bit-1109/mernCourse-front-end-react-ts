@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LocalHostPath } from "../../../functions/LocalHostPath";
+import { RootState } from "../../store";
 //funzione del toolkit per scrivere delle fetch parametriche. e ritornare in automatico le risposte.
 
 export interface INote {
@@ -8,6 +9,10 @@ export interface INote {
     title: string;
     text: string;
     isCompleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    ticket: number;
+    __v: number;
 }
 
 export interface IMessageResponse {
@@ -35,11 +40,29 @@ export interface IDeleteNoteBody {
     IdNote: string;
     UserId: string;
 }
-// builder.query/mutation< RISPOSTA DELL API   ,   PARAMETRO che si aspetta la query  >
+
+export interface IbodyData {
+    userId: string;
+    bodyData: {
+        titleBody: string;
+        textBody: string;
+        IdNote: string;
+    };
+}
+// builder.query/mutation< RISPOSTA DELL API   ,   PARAMETRO che si aspetta la query/mutation  >
 
 export const NotesApi = createApi({
     reducerPath: "NotesApi",
-    baseQuery: fetchBaseQuery({ baseUrl: LocalHostPath }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: LocalHostPath,
+        prepareHeaders: (Headers, { getState }) => {
+            const token = (getState() as RootState).token.token;
+            if (token) {
+                Headers.set("Authorization", `Bearer ${token}`);
+            }
+            return Headers;
+        },
+    }),
     endpoints: (builder) => ({
         //GET
         getAllUserNotes: builder.query<INote[], string>({
@@ -56,10 +79,10 @@ export const NotesApi = createApi({
         }),
 
         // PATCH
-        editNote: builder.mutation<IMessageResponse, IEditNoteBody>({
+        editNote: builder.mutation<IMessageResponse, IbodyData>({
             query: ({ userId, bodyData }) => ({
                 url: `/Notes/${userId}`,
-                method: "POST",
+                method: "PATCH",
                 body: bodyData,
             }),
         }),
@@ -74,11 +97,11 @@ export const NotesApi = createApi({
         }),
 
         //POST
-        getSingleNote: builder.mutation<INote, IDeleteNoteBody>({
-            query: ({ IdNote, UserId }) => ({
-                url: `/Notes/${UserId}`,
+        getSingleNote: builder.mutation<INote, { NoteId: string; UserId: string }>({
+            query: ({ NoteId, UserId }) => ({
+                url: `/Notes/get-note/${UserId}`,
                 method: "POST",
-                body: IdNote,
+                body: { NoteId },
             }),
         }),
 

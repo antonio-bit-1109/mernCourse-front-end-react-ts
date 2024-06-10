@@ -16,6 +16,7 @@ import ImagesComp from "./components/MAIN/ImagesComp";
 import AllUsersComp from "./components/USERS/fetchAllUsers";
 import FetchSingleUser from "./components/USERS/FetchSingleUser";
 import FetchSingleUserNote from "./components/NOTES/FetchSingleUserNote";
+// import EditSIngleNote from "./components/NOTES/EditSingleNote";
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                     <Route path="UserSettings" element={<UserSettings />} />
                     <Route path="singleUser" element={<FetchSingleUser />} />
                     <Route path="singleNote/:idNote" element={<FetchSingleUserNote />} />
+                    {/* <Route path="editSingleNote/:idNote" element={<EditSIngleNote />} /> */}
                 </Route>
 
                 <Route path="/allUsers" element={<AllUsersComp />} />

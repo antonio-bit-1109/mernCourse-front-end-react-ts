@@ -12,6 +12,8 @@ const VIsualizzaNote = () => {
     const { token } = useSelector((store: RootState) => store.token);
     const [userId, setUserId] = useState<string>("");
 
+    const { data: notes, error, isLoading, refetch } = useGetAllUserNotesQuery(userId);
+
     const decriptToken = (token: string) => {
         const decodedToken: IDecodedTokenStructure = jwtDecode(token);
         return decodedToken.id;
@@ -21,17 +23,23 @@ const VIsualizzaNote = () => {
         if (token) {
             const userIdDecripted = decriptToken(token);
             setUserId(userIdDecripted);
+            return;
+        }
+    }, []);
+
+    useEffect(() => {
+        if (userId) {
+            refetch();
+        }
+    }, [userId, refetch]);
+
+    useEffect(() => {
+        if (token) {
+            const userIdDecripted = decriptToken(token);
+            setUserId(userIdDecripted);
+            return;
         }
     }, [token]);
-
-    const {
-        data: notes,
-        error,
-        isLoading,
-    } = useGetAllUserNotesQuery(userId, {
-        skip: !userId,
-    });
-    // return <div> usernotes </div>;
 
     if (error) {
         const CustomError = error as ICustomError;
