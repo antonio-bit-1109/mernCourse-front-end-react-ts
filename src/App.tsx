@@ -15,6 +15,7 @@ import LoginInputs from "./components/LOGIN/LoginInputs";
 import ImagesComp from "./components/MAIN/ImagesComp";
 import AllUsersComp from "./components/USERS/fetchAllUsers";
 import FetchSingleUser from "./components/USERS/FetchSingleUser";
+import FetchSingleUserNote from "./components/NOTES/FetchSingleUserNote";
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
                     <Route path="notes" element={<VIsualizzaNote />} />
                     <Route path="UserSettings" element={<UserSettings />} />
                     <Route path="singleUser" element={<FetchSingleUser />} />
+                    <Route path="singleNote/:idNote" element={<FetchSingleUserNote />} />
                 </Route>
 
                 <Route path="/allUsers" element={<AllUsersComp />} />

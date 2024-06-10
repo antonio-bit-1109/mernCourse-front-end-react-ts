@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { ICustomError, IDecodedTokenStructure } from "../../interfaces/interfaces";
 import { Button, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const VIsualizzaNote = () => {
+    const navigate = useNavigate();
     const { token } = useSelector((store: RootState) => store.token);
     const [userId, setUserId] = useState<string>("");
 
@@ -45,15 +47,26 @@ const VIsualizzaNote = () => {
 
     if (notes && notes.length > 0) {
         return notes.map((note) => (
-            <Card>
+            <Card key={`${note._id}`}>
                 <Card.Body>
                     <Card.Title>{note.title}</Card.Title>
                     <Card.Text>{note.text} </Card.Text>
                     <Card.Text>{note.isCompleted} </Card.Text>
-                    <Button variant="primary">modifica</Button>
+                    <Button
+                        onClick={() => {
+                            navigate(`/login/singleNote/${note._id}`);
+                        }}
+                        variant="primary"
+                    >
+                        More Info
+                    </Button>
                 </Card.Body>
             </Card>
         ));
+    }
+
+    if (notes && notes.length <= 0) {
+        return <div> Nessuna nota disponibile per l'utente selezionato.</div>;
     }
 };
 

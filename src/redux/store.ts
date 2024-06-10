@@ -6,11 +6,19 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import { NotesApi } from "./app/api/notesApiSlice";
+import expireReducer from "redux-persist-expire";
 
 const persistConfig = {
     key: "root",
     storage,
     whitelist: ["token"], // Nome del reducer che desideri persistere
+    transform: [
+        expireReducer("token", {
+            expireSeconds: 60 * 60 * 24 * 7,
+            expiredState: { token: null },
+            autoExpire: true,
+        }),
+    ],
 };
 
 const persistedReducer = persistReducer(persistConfig, tokenReducer);
