@@ -60,7 +60,15 @@ const VIsualizzaNote = () => {
                 <Card.Body>
                     <Card.Title>{note.title}</Card.Title>
                     <Card.Text>{note.text} </Card.Text>
-                    <Card.Text>{note.isCompleted} </Card.Text>
+                    <Card.Text>
+                        {" "}
+                        Stato nota :{" "}
+                        {note.isCompleted ? (
+                            <span className="text-success fw-bold">completato</span>
+                        ) : (
+                            <span className="text-danger fw-bold"> non completato</span>
+                        )}{" "}
+                    </Card.Text>
                     <Button
                         onClick={() => {
                             navigate(`/login/singleNote/${note._id}`);

@@ -49,7 +49,7 @@ export interface IbodyData {
         IdNote: string;
     };
 }
-// builder.query/mutation< RISPOSTA DELL API   ,   PARAMETRO che si aspetta la query/mutation  >
+// builder.query/mutation< RISPOSTA DELL API all EVENTO FULLFILLED   ,   PARAMETRO che si aspetta la query/mutation  >
 
 export const NotesApi = createApi({
     reducerPath: "NotesApi",
@@ -106,11 +106,12 @@ export const NotesApi = createApi({
         }),
 
         //POST
-        checkCompletedNote: builder.mutation<IMessageResponse, IDeleteNoteBody>({
-            query: ({ IdNote, UserId }) => ({
-                url: `/Notes/${UserId}`,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        checkCompletedNote: builder.mutation<IMessageResponse, { UserId: string; NoteId: string | any }>({
+            query: ({ NoteId, UserId }) => ({
+                url: `/Notes/completeNote/${UserId}`,
                 method: "POST",
-                body: IdNote,
+                body: { NoteId },
             }),
         }),
     }),
@@ -123,10 +124,4 @@ export const {
     useDeleteNoteMutation,
     useGetSingleNoteMutation,
     useCheckCompletedNoteMutation,
-    //  useGetAllUsersQuery,
-    //  useCreateNewUserMutation,
-    //  useEditUserMutation,
-    //  useDeleteUserMutation,
-    //  useGetSingleUserMutation,
-    //  useSoftDeleteUserMutation,
 } = NotesApi;

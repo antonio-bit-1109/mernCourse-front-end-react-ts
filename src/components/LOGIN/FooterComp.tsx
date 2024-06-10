@@ -1,4 +1,4 @@
-import { Col } from "react-bootstrap";
+import { Button, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
@@ -67,13 +67,13 @@ const FooterComp = () => {
                 <div className="d-flex align-items-center h-100 justify-content-around">
                     {" "}
                     <div>
-                        <p
+                        <Button
                             onClick={() => {
                                 navigate("notes");
                             }}
                         >
-                            Visualizza Note
-                        </p>
+                            Crea nuova nota
+                        </Button>
                     </div>
                     <div>
                         <p

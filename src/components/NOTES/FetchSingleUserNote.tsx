@@ -83,16 +83,23 @@ const FetchSingleNote = () => {
     }
 
     if (nota) {
+        console.log(nota);
         return (
             <div className="d-flex flex-column align-items-center justify-content-center">
                 <Col xs="10" md="5">
                     <Button onClick={goBack}>torna indietro </Button>
-                    <div className=" border border-2 d-flex flex-column align-items-center mt-5 position-relative">
+                    <div className=" border border-2 d-flex flex-column align-items-center mt-5 position-relative p-4">
                         <FaPen onClick={ShowEditForm} className="position-absolute customPOsition pointer" />
-                        <p>nota N° {nota.ticket}</p>
-                        <h3>{nota.title}</h3>
-                        <h4>{nota.text}</h4>
-                        <p>{nota.isCompleted}</p>
+                        <p className="text-center">nota N° {nota.ticket}</p>
+                        <h3 className="text-center">{nota.title}</h3>
+                        <h4 className="text-center">{nota.text}</h4>
+                        <p>
+                            {nota.isCompleted ? (
+                                <span className="text-success fw-bold">completato</span>
+                            ) : (
+                                <span className="text-danger fw-bold"> non completato</span>
+                            )}{" "}
+                        </p>
                     </div>
                 </Col>
 
