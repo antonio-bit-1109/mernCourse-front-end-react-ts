@@ -36,6 +36,7 @@ const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText }: IP
             setIdUser(null);
             console.error(" errore nella decriptazione del token in formEditNote.tsx");
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
