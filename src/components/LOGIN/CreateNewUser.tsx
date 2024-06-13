@@ -1,16 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Col, Form } from "react-bootstrap";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { useCreateNewUserMutation } from "../../redux/app/api/usersApiSlice";
 import EsitoCreateUser from "./EsitoCreateUser";
+import { FieldValues, useForm } from "react-hook-form";
+
+export interface IStructureData_React_Hook_Form {
+    confermaPassword: string;
+    password: string;
+    username: string;
+}
 
 const CreateNewUser = () => {
     const [ruoli, setRuoli] = useState<string[] | string>("");
-    const [FormUsername, setUsername] = useState<string>("");
-    const [FormPassword, setPassword] = useState<string>("");
-    const [FormConfirmPassword, setConfirmPassword] = useState<string>("");
-
     const [createNewUser, { error, isLoading, data }] = useCreateNewUserMutation();
+    const [erroreArrayRuoli, setErroreArrayRuoli] = useState<null | string>(null);
+
+    useEffect(() => {
+        if (erroreArrayRuoli) {
+            setTimeout(() => {
+                setErroreArrayRuoli(null);
+            }, 2000);
+        }
+    }, [erroreArrayRuoli]);
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        watch,
+        reset,
+    } = useForm();
+
+    const password = watch("password");
 
     const handleInsertion = (array: string[], value: string) => {
         array.forEach((elem) => {
@@ -28,12 +50,16 @@ const CreateNewUser = () => {
         return array.filter((elem) => elem !== stringInArray);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    const submitTheFetch = (data: FieldValues) => {
+        console.log(data);
+
         if (Array.isArray(ruoli)) {
-            createNewUser({ username: FormUsername, password: FormPassword, roles: ruoli });
+            createNewUser({ username: data.username, password: data.password, roles: ruoli });
+            reset();
+            setRuoli("");
             return;
         } else {
+            setErroreArrayRuoli("specifica i ruoli per l'utente creato.");
             console.error("lo stato ruoli in CreateNewUser.tsx is not an array.");
         }
     };
@@ -41,45 +67,66 @@ const CreateNewUser = () => {
     return (
         <div className="d-flex justify-content-center">
             <Col sm="10" md="5" xl="4">
-                <Form
-                    onSubmit={(e) => {
-                        handleSubmit(e);
-                    }}
-                    className=" my-5"
-                >
+                <Form onSubmit={handleSubmit(submitTheFetch)} className=" my-5">
                     <h2>Crea Nuovo Utente</h2>
                     <Form.Group className="mb-3" controlId="idUsernameCreateUser">
                         <Form.Label>UserName</Form.Label>
                         <Form.Control
-                            value={FormUsername}
-                            onChange={(e) => {
-                                setUsername(e.target.value);
-                            }}
+                            {...register("username", {
+                                required: "inserisci username",
+                                pattern: {
+                                    value: /^[A-Za-z0123456789]+$/i,
+                                    message: "lo username può contenere solo lettere o numeri.",
+                                },
+                            })}
                             type="text"
                             placeholder="inserisci nome*"
                         />
+                        {errors.username && (
+                            <div className="text-danger">
+                                {errors.username.message !== undefined && errors.username.message.toString()}
+                            </div>
+                        )}
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="idPasswordCreateUser">
                         <Form.Label>Password</Form.Label>
                         <Form.Control
-                            value={FormPassword}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                            }}
+                            {...register("password", {
+                                required: "inserisci una password",
+                                minLength: {
+                                    value: 8,
+                                    message: "la password deve essere lunga almeno 8 caratteri.",
+                                },
+                                pattern: {
+                                    value: /^[A-Za-z0123456789,.!?@#*]+$/i,
+                                    message: "valore non consentito, provane un altro.",
+                                },
+                            })}
                             type="password"
                             placeholder="Inserisci una password*"
                         />
+                        {errors.password && (
+                            <div className="text-danger">
+                                {errors.password.message !== undefined && errors.password.message.toString()}
+                            </div>
+                        )}
                     </Form.Group>{" "}
                     <Form.Group className="mb-3" controlId="idConfermaPasswordCreateUser">
                         <Form.Label>Conferma Password</Form.Label>
                         <Form.Control
-                            value={FormConfirmPassword}
-                            onChange={(e) => {
-                                setConfirmPassword(e.target.value);
-                            }}
+                            {...register("confermaPassword", {
+                                required: "conferma la password inserita.",
+                                validate: (value) => value === password || "le password non corrispondono",
+                            })}
                             type="password"
                             placeholder="Password"
                         />
+                        {errors.confermaPassword && (
+                            <div className="text-danger">
+                                {errors.confermaPassword.message !== undefined &&
+                                    errors.confermaPassword.message.toString()}
+                            </div>
+                        )}
                     </Form.Group>{" "}
                     <Form.Group className="mb-3" controlId="idRuoliCreateUser">
                         <Form.Label>Ruoli</Form.Label>
@@ -123,6 +170,9 @@ const CreateNewUser = () => {
                         Submit
                     </Button>
                     <EsitoCreateUser isLoading={isLoading} error={error} data={data} />
+                    {erroreArrayRuoli !== null && (
+                        <div className={` ${erroreArrayRuoli ? "d-block" : "d-none"}`}>{erroreArrayRuoli}</div>
+                    )}
                 </Form>
             </Col>
         </div>
