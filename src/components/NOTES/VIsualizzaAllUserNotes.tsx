@@ -45,9 +45,32 @@ const VIsualizzaNote = () => {
     if (error) {
         const CustomError = error as ICustomError;
         if (CustomError.data) {
-            return <div>{CustomError.data.message}</div>;
+            return (
+                <div>
+                    {" "}
+                    <Button
+                        onClick={() => {
+                            navigate("/login/singleUser");
+                        }}
+                    >
+                        indietro
+                    </Button>
+                    {CustomError.data.message}
+                </div>
+            );
         } else {
-            return <div>errore durante il reperimento delle note.</div>;
+            return (
+                <div>
+                    <Button
+                        onClick={() => {
+                            navigate("/login/singleUser");
+                        }}
+                    >
+                        indietro
+                    </Button>
+                    errore durante il reperimento delle note.
+                </div>
+            );
         }
     }
     if (isLoading) {
@@ -56,29 +79,39 @@ const VIsualizzaNote = () => {
 
     if (notes && notes.length > 0) {
         return notes.map((note) => (
-            <Card key={`${note._id}`}>
-                <Card.Body>
-                    <Card.Title>{note.title}</Card.Title>
-                    <Card.Text>{note.text} </Card.Text>
-                    <Card.Text>
-                        {" "}
-                        Stato nota :{" "}
-                        {note.isCompleted ? (
-                            <span className="text-success fw-bold">completato</span>
-                        ) : (
-                            <span className="text-danger fw-bold"> non completato</span>
-                        )}{" "}
-                    </Card.Text>
-                    <Button
-                        onClick={() => {
-                            navigate(`/login/singleNote/${note._id}`);
-                        }}
-                        variant="primary"
-                    >
-                        More Info
-                    </Button>
-                </Card.Body>
-            </Card>
+            <>
+                {" "}
+                <Button
+                    onClick={() => {
+                        navigate("/login/singleUser");
+                    }}
+                >
+                    indietro
+                </Button>
+                <Card key={`${note._id}`}>
+                    <Card.Body>
+                        <Card.Title>{note.title}</Card.Title>
+                        <Card.Text>{note.text} </Card.Text>
+                        <Card.Text>
+                            {" "}
+                            Stato nota :{" "}
+                            {note.isCompleted ? (
+                                <span className="text-success fw-bold">completato</span>
+                            ) : (
+                                <span className="text-danger fw-bold"> non completato</span>
+                            )}{" "}
+                        </Card.Text>
+                        <Button
+                            onClick={() => {
+                                navigate(`/login/singleNote/${note._id}`);
+                            }}
+                            variant="primary"
+                        >
+                            More Info
+                        </Button>
+                    </Card.Body>
+                </Card>
+            </>
         ));
     }
 

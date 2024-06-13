@@ -4,6 +4,7 @@ import { FaDeleteLeft } from "react-icons/fa6";
 import { useCreateNewUserMutation } from "../../redux/app/api/usersApiSlice";
 import EsitoCreateUser from "./EsitoCreateUser";
 import { FieldValues, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export interface IStructureData_React_Hook_Form {
     confermaPassword: string;
@@ -12,6 +13,7 @@ export interface IStructureData_React_Hook_Form {
 }
 
 const CreateNewUser = () => {
+    const navigate = useNavigate();
     const [ruoli, setRuoli] = useState<string[] | string>("");
     const [createNewUser, { error, isLoading, data }] = useCreateNewUserMutation();
     const [erroreArrayRuoli, setErroreArrayRuoli] = useState<null | string>(null);
@@ -67,6 +69,14 @@ const CreateNewUser = () => {
     return (
         <div className="d-flex justify-content-center">
             <Col sm="10" md="5" xl="4">
+                <Button
+                    onClick={() => {
+                        navigate("/login/singleUser");
+                    }}
+                >
+                    {" "}
+                    indietro
+                </Button>
                 <Form onSubmit={handleSubmit(submitTheFetch)} className=" my-5">
                     <h2>Crea Nuovo Utente</h2>
                     <Form.Group className="mb-3" controlId="idUsernameCreateUser">
