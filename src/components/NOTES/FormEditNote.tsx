@@ -14,14 +14,13 @@ export interface IProps {
     text: string;
     setTitle: React.Dispatch<React.SetStateAction<string>>;
     setText: React.Dispatch<React.SetStateAction<string>>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    asyncActions: any;
 }
 
-const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText }: IProps) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const param = useParams<any>();
-
+const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText, asyncActions }: IProps) => {
+    const param = useParams<{ idNote: string }>();
     const { token } = useSelector((store: RootState) => store.token);
-
     const [IdUser, setIdUser] = useState<string>("");
 
     // hook per modificare la singola nota
@@ -49,29 +48,32 @@ const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText }: IP
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (title !== "" || text !== "") {
             if (IdUser === null) {
                 return console.error(" errore! Id User è null in formEditNote.tsx");
             }
             if (param.idNote) {
-                editSingleNote({
+                await editSingleNote({
                     userId: IdUser,
                     bodyData: { titleBody: title, textBody: text, IdNote: param.idNote },
                 });
+
+                await asyncActions();
             }
             console.error("il parametro idNote non arriva correttamente in FormEditNote.tsx");
         }
         console.log("inserisci dati nel form");
     };
 
-    const checkNoteAsCompleted = () => {
-        if (IdUser === null && param.idNote === undefined) {
-            return console.error("durante il check completato della nota idUser è null.");
-        } else {
-            checkCompletedNote({ UserId: IdUser, NoteId: param.idNote });
+    const checkNoteAsCompleted = async () => {
+        if (!IdUser || !param.idNote) {
+            console.error("Durante il check completato della nota idUser è null.");
+            return;
         }
+        await checkCompletedNote({ UserId: IdUser, NoteId: param.idNote });
+        await asyncActions();
     };
 
     return (

@@ -11,9 +11,9 @@ import FormEditNote from "./FormEditNote";
 
 const FetchSingleNote = () => {
     const navigate = useNavigate();
-    const param = useParams();
+    const param = useParams<{ idNote: string }>();
     const { token } = useSelector((store: RootState) => store.token);
-    const [idUser, setIdUser] = useState<string | null | undefined>(null);
+    const [idUser, setIdUser] = useState<string | null>(null);
     const [EditFormsIsVisible, setEditFormIsVisible] = useState<boolean>(false);
 
     const [title, setTitle] = useState<string>("");
@@ -47,13 +47,15 @@ const FetchSingleNote = () => {
 
     useEffect(() => {
         const idUser = decodingToken();
-        setIdUser(idUser);
-        asyncActions();
+        if (idUser) {
+            setIdUser(idUser);
+            asyncActions();
+        }
         // console.log(singolaNota);
     }, [decodingToken, param.idNote, idUser, getSingleNote, asyncActions]);
 
     const goBack = () => {
-        navigate("/login/notes");
+        navigate("/notes");
     };
 
     const ShowEditForm = async () => {
@@ -109,6 +111,7 @@ const FetchSingleNote = () => {
                     text={text}
                     setTitle={setTitle}
                     setText={setText}
+                    asyncActions={asyncActions}
                 />
             </div>
         );

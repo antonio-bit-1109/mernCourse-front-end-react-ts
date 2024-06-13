@@ -44,6 +44,9 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
+// Dopo la definizione dello store e di persistor
+
+// Utilizza ReturnType sulla funzione getState dello store per ottenere il tipo di stato completo
 export type RootState = ReturnType<typeof store.getState>;
 
 // export const store = configureStore({

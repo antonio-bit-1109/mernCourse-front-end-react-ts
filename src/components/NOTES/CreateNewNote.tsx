@@ -23,6 +23,7 @@ const CreateNewNote = () => {
                 setDecriptedUserID(userID);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const decriptToken = (string: string) => {
