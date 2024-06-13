@@ -57,7 +57,7 @@ const FetchSingleUser = () => {
                         <div>
                             <Button
                                 onClick={() => {
-                                    navigate("/login/notes");
+                                    navigate("/notes");
                                 }}
                             >
                                 visualizza note

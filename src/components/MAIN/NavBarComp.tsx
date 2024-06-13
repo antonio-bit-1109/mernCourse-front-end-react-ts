@@ -47,7 +47,7 @@ const NavBarComp = () => {
                             className="text-light m-0 ms-auto"
                             onClick={() => {
                                 dispatch(clearToken());
-                                navigate("/login");
+                                navigate("/");
                             }}
                         >
                             LogOut

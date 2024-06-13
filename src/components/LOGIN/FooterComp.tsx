@@ -59,7 +59,7 @@ const FooterComp = () => {
                                 {UserToken && decodedToken && renderStatus(decodedToken)}
                             </span>
                             <span className="ms-2">
-                                <MdChangeCircle className="pointer" size={25} />
+                                {UserToken && <MdChangeCircle className="pointer" size={25} />}
                             </span>
                         </p>
                     </div>
@@ -68,22 +68,22 @@ const FooterComp = () => {
             <Col>
                 <div className="d-flex align-items-center h-100 justify-content-around mb-3">
                     {" "}
-                    {decodedToken && (
+                    {UserToken && (
                         <div>
                             <Button
                                 onClick={() => {
-                                    navigate("createNewNote");
+                                    navigate("/createNewNote");
                                 }}
                             >
                                 Crea nuova nota
                             </Button>
                         </div>
                     )}
-                    {decodedToken && decodedToken.roles.includes("admin") && (
+                    {UserToken && decodedToken && decodedToken.roles.includes("admin") && (
                         <div>
                             <Button
                                 onClick={() => {
-                                    navigate("createNewUser");
+                                    navigate("/createNewUser");
                                 }}
                             >
                                 Crea nuovo utente

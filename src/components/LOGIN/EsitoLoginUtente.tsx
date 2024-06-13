@@ -21,7 +21,7 @@ const EsitoLoginUtente: React.FC<any> = ({ error, isLoading, token }) => {
 
         if (token) {
             setTimeout(() => {
-                navigate("singleUser");
+                navigate("/singleUser");
             }, 2000);
         }
     }, [token, error, isLoading, navigate]);

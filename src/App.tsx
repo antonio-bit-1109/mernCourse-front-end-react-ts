@@ -4,14 +4,14 @@ import "./index.scss";
 import "./App.scss";
 // import HomePage from "./components/MAIN/HomePage";
 import NavBarComp from "./components/MAIN/NavBarComp";
-import MainPageComponent from "./components/MAIN/MainPageComponent";
+// import MainPageComponent from "./components/MAIN/MainPageComponent";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginComponent from "./components/LOGIN/LoginComponent";
-import MainPartComp from "./components/MAIN/MainPartComp";
+// import MainPartComp from "./components/MAIN/MainPartComp";
 import VIsualizzaNote from "./components/NOTES/VIsualizzaAllUserNotes";
 import LoginInputs from "./components/LOGIN/LoginInputs";
-import ImagesComp from "./components/MAIN/ImagesComp";
+// import ImagesComp from "./components/MAIN/ImagesComp";
 import AllUsersComp from "./components/USERS/fetchAllUsers";
 import FetchSingleUser from "./components/USERS/FetchSingleUser";
 import FetchSingleUserNote from "./components/NOTES/FetchSingleUserNote";
@@ -23,12 +23,12 @@ function App() {
         <BrowserRouter>
             <NavBarComp />
             <Routes>
-                <Route path="/" element={<MainPageComponent />}>
+                {/* <Route path="/" element={<MainPageComponent />}>
                     <Route index element={<MainPartComp />} />
                     <Route path="images" element={<ImagesComp />} />
-                </Route>
+                </Route> */}
 
-                <Route path="/login" element={<LoginComponent />}>
+                <Route path="/" element={<LoginComponent />}>
                     <Route index element={<LoginInputs />} />
                     <Route path="notes" element={<VIsualizzaNote />} />
                     <Route path="createNewUser" element={<CreateNewUser />} />

@@ -66,7 +66,7 @@ const VIsualizzaNote = () => {
                     {" "}
                     <Button
                         onClick={() => {
-                            navigate("/login/singleUser");
+                            navigate("/singleUser");
                         }}
                     >
                         indietro
@@ -79,7 +79,7 @@ const VIsualizzaNote = () => {
                 <div>
                     <Button
                         onClick={() => {
-                            navigate("/login/singleUser");
+                            navigate("/singleUser");
                         }}
                     >
                         indietro
@@ -101,7 +101,7 @@ const VIsualizzaNote = () => {
                     {" "}
                     <Button
                         onClick={() => {
-                            navigate("/login/singleUser");
+                            navigate("/singleUser");
                         }}
                     >
                         indietro
@@ -131,7 +131,7 @@ const VIsualizzaNote = () => {
                                 </Card.Text>
                                 <Button
                                     onClick={() => {
-                                        navigate(`/login/singleNote/${note._id}`);
+                                        navigate(`/singleNote/${note._id}`);
                                     }}
                                     variant="primary"
                                 >

@@ -26,7 +26,7 @@ const LoginInputs = () => {
         await autenticate({ usernameBody: username, passwordBody: password });
 
         if (status === "fulfilled") {
-            navigate("singleUser");
+            navigate("/singleUser");
         }
     };
 
