@@ -1,5 +1,6 @@
 .height {
     height: 70.8vh;
+    overflow-y: scroll;
 }
 
 .customPOsition {
@@ -15,4 +16,10 @@
     width: 70px;
     height: 70px;
     border-radius: 50%;
+}
+
+.absolute-position-0 {
+    position: absolute;
+    top: 30px;
+    right: 30px;
 }

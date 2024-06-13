@@ -1,11 +1,12 @@
 import { useSelector } from "react-redux";
-import { useGetAllUserNotesQuery } from "../../redux/app/api/notesApiSlice";
+import { useDeleteNoteMutation, useGetAllUserNotesQuery } from "../../redux/app/api/notesApiSlice";
 import { RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { ICustomError, IDecodedTokenStructure } from "../../interfaces/interfaces";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const VIsualizzaNote = () => {
     const navigate = useNavigate();
@@ -13,6 +14,8 @@ const VIsualizzaNote = () => {
     const [userId, setUserId] = useState<string>("");
 
     const { data: notes, error, isLoading, refetch } = useGetAllUserNotesQuery(userId);
+    const [deleteNoteFetch, { isLoading: delIsLoading, isSuccess: delIsSuccess, isError: delIsError, data: delData }] =
+        useDeleteNoteMutation();
 
     const decriptToken = (token: string) => {
         const decodedToken: IDecodedTokenStructure = jwtDecode(token);
@@ -41,6 +44,19 @@ const VIsualizzaNote = () => {
             return;
         }
     }, [token]);
+
+    useEffect(() => {
+        if (delIsSuccess) {
+            refetch();
+        }
+        if (delIsError) {
+            refetch();
+        }
+    }, [delIsSuccess, refetch, delIsError]);
+
+    const deleteNote = async (idNote: string) => {
+        await deleteNoteFetch({ IdNote: idNote, UserId: userId });
+    };
 
     if (error) {
         const CustomError = error as ICustomError;
@@ -79,39 +95,53 @@ const VIsualizzaNote = () => {
 
     if (notes && notes.length > 0) {
         return (
-            <div>
-                <Button
-                    onClick={() => {
-                        navigate("/login/singleUser");
-                    }}
-                >
-                    indietro
-                </Button>
-                {notes.map((note) => (
-                    <Card key={`${note._id}`}>
-                        <Card.Body>
-                            <Card.Title>{note.title}</Card.Title>
-                            <Card.Text>{note.text}</Card.Text>
-                            <Card.Text>
-                                Stato nota :{" "}
-                                {note.isCompleted ? (
-                                    <span className="text-success fw-bold">completato</span>
-                                ) : (
-                                    <span className="text-danger fw-bold"> non completato</span>
-                                )}
-                            </Card.Text>
-                            <Button
+            <>
+                {" "}
+                <Col>
+                    {" "}
+                    <Button
+                        onClick={() => {
+                            navigate("/login/singleUser");
+                        }}
+                    >
+                        indietro
+                    </Button>
+                </Col>
+                <Col xs="10" md="8" lg="6" xl="4">
+                    {notes.map((note) => (
+                        <Card key={`${note._id}`}>
+                            <FaRegTrashAlt
                                 onClick={() => {
-                                    navigate(`/login/singleNote/${note._id}`);
+                                    deleteNote(note._id);
                                 }}
-                                variant="primary"
-                            >
-                                More Info
-                            </Button>
-                        </Card.Body>
-                    </Card>
-                ))}
-            </div>
+                                size={30}
+                                color="red"
+                                className="absolute-position-0 pointer"
+                            />
+                            <Card.Body>
+                                <Card.Title>{note.title}</Card.Title>
+                                <Card.Text>{note.text}</Card.Text>
+                                <Card.Text>
+                                    Stato nota :{" "}
+                                    {note.isCompleted ? (
+                                        <span className="text-success fw-bold">completato</span>
+                                    ) : (
+                                        <span className="text-danger fw-bold"> non completato</span>
+                                    )}
+                                </Card.Text>
+                                <Button
+                                    onClick={() => {
+                                        navigate(`/login/singleNote/${note._id}`);
+                                    }}
+                                    variant="primary"
+                                >
+                                    More Info
+                                </Button>
+                            </Card.Body>
+                        </Card>
+                    ))}
+                </Col>
+            </>
         );
     }
 

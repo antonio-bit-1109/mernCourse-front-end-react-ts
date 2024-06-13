@@ -36,10 +36,10 @@ export interface IEditNoteBody {
     };
 }
 
-export interface IDeleteNoteBody {
-    IdNote: string;
-    UserId: string;
-}
+// export interface IDeleteNoteBody {
+//     IdNote: string;
+//     UserId: string;
+// }
 
 export interface IbodyData {
     userId: string;
@@ -88,11 +88,11 @@ export const NotesApi = createApi({
         }),
 
         // DELETE
-        deleteNote: builder.mutation<IMessageResponse, IDeleteNoteBody>({
+        deleteNote: builder.mutation<IMessageResponse, { IdNote: string; UserId: string }>({
             query: ({ IdNote, UserId }) => ({
                 url: `/Notes/${UserId}`,
                 method: "DELETE",
-                body: IdNote,
+                body: { IdNote },
             }),
         }),
 

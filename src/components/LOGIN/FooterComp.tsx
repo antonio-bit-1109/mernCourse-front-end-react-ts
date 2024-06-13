@@ -72,7 +72,7 @@ const FooterComp = () => {
                         <div>
                             <Button
                                 onClick={() => {
-                                    navigate("notes");
+                                    navigate("createNewNote");
                                 }}
                             >
                                 Crea nuova nota
