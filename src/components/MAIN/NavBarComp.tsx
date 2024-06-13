@@ -7,6 +7,7 @@ import { clearToken } from "../../redux/app/traditionalSlices/tokenReducer";
 const NavBarComp = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     return (
         <>
             <Navbar className=" bg-black sticky-top">

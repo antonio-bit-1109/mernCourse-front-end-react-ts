@@ -22,7 +22,6 @@ const FooterComp = () => {
     useEffect(() => {
         if (UserToken) {
             const tokenDecripted = jwtDecode(UserToken);
-            console.log(tokenDecripted);
             setDecodedToken(tokenDecripted);
         }
     }, [UserToken]);
@@ -66,24 +65,28 @@ const FooterComp = () => {
             <Col>
                 <div className="d-flex align-items-center h-100 justify-content-around">
                     {" "}
-                    <div>
-                        <Button
-                            onClick={() => {
-                                navigate("notes");
-                            }}
-                        >
-                            Crea nuova nota
-                        </Button>
-                    </div>
-                    <div>
-                        <p
-                            onClick={() => {
-                                navigate("UserSettings");
-                            }}
-                        >
-                            Visualizza User Settings
-                        </p>
-                    </div>
+                    {decodedToken && (
+                        <div>
+                            <Button
+                                onClick={() => {
+                                    navigate("notes");
+                                }}
+                            >
+                                Crea nuova nota
+                            </Button>
+                        </div>
+                    )}
+                    {decodedToken && decodedToken.roles.includes("admin") && (
+                        <div>
+                            <Button
+                                onClick={() => {
+                                    navigate("createNewUser");
+                                }}
+                            >
+                                Crea nuovo utente
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </Col>
         </div>

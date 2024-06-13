@@ -47,7 +47,7 @@ export const UsersApi = createApi({
             query: () => "/Users",
         }),
         //POST
-        createNewUser: builder.mutation<IUser, ICreateUserBody>({
+        createNewUser: builder.mutation<{ message: string }, ICreateUserBody>({
             query: (newUserData) => ({
                 url: "/Users",
                 method: "POST",
