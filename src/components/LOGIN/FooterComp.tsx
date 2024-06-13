@@ -1,11 +1,15 @@
 import { Button, Col } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { MdChangeCircle } from "react-icons/md";
+import { useSoftDeleteUserMutation } from "../../redux/app/api/usersApiSlice";
+import { clearToken } from "../../redux/app/traditionalSlices/tokenReducer";
+
 const FooterComp = () => {
+    const dispatch = useDispatch();
     const UserToken = useSelector((store: RootState) => store.token.token);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [decodedToken, setDecodedToken] = useState<any>(null);
@@ -19,6 +23,8 @@ const FooterComp = () => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
 
+    const [softDeleteFetch, { isLoading, isSuccess, isError }] = useSoftDeleteUserMutation();
+
     useEffect(() => {
         if (UserToken) {
             const tokenDecripted = jwtDecode(UserToken);
@@ -31,11 +37,15 @@ const FooterComp = () => {
         if (decodedToken.isActive) {
             return "Attivo";
         }
-        if (decodedToken.isActive !== false) {
+        if (!decodedToken.isActive) {
             return "Inattivo";
         }
 
         return null;
+    };
+
+    const deactivateUser = async () => {
+        await softDeleteFetch({ id: decodedToken.id });
     };
 
     return (
@@ -59,7 +69,7 @@ const FooterComp = () => {
                                 {UserToken && decodedToken && renderStatus(decodedToken)}
                             </span>
                             <span className="ms-2">
-                                {UserToken && <MdChangeCircle className="pointer" size={25} />}
+                                {UserToken && <MdChangeCircle onClick={deactivateUser} className="pointer" size={25} />}
                             </span>
                         </p>
                     </div>

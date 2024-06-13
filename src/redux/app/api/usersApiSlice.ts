@@ -23,10 +23,6 @@ export interface Ireply {
     message: string;
 }
 
-export interface IiD {
-    id: string;
-}
-
 // builder.query/mutation< RISPOSTA DELL API   ,   PARAMETRO che si aspetta la query   >
 
 export const UsersApi = createApi({
@@ -63,7 +59,7 @@ export const UsersApi = createApi({
             }),
         }),
         //DELETE
-        deleteUser: builder.mutation<Ireply, IiD>({
+        deleteUser: builder.mutation<Ireply, { id: string }>({
             query: (userId) => ({
                 url: "/Users",
                 method: "DELETE",
@@ -71,7 +67,7 @@ export const UsersApi = createApi({
             }),
         }),
         // POST
-        getSingleUser: builder.mutation<IUser, IiD>({
+        getSingleUser: builder.mutation<IUser, { id: string }>({
             query: (userId) => ({
                 url: "/Users/get-user",
                 method: "POST",
@@ -79,7 +75,7 @@ export const UsersApi = createApi({
             }),
         }),
         //POST
-        softDeleteUser: builder.mutation<Ireply, IiD>({
+        softDeleteUser: builder.mutation<Ireply, { id: string }>({
             query: (userId) => ({
                 url: "/Users/user-soft-delete",
                 method: "POST",
