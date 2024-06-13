@@ -78,9 +78,8 @@ const VIsualizzaNote = () => {
     }
 
     if (notes && notes.length > 0) {
-        return notes.map((note) => (
-            <>
-                {" "}
+        return (
+            <div>
                 <Button
                     onClick={() => {
                         navigate("/login/singleUser");
@@ -88,31 +87,32 @@ const VIsualizzaNote = () => {
                 >
                     indietro
                 </Button>
-                <Card key={`${note._id}`}>
-                    <Card.Body>
-                        <Card.Title>{note.title}</Card.Title>
-                        <Card.Text>{note.text} </Card.Text>
-                        <Card.Text>
-                            {" "}
-                            Stato nota :{" "}
-                            {note.isCompleted ? (
-                                <span className="text-success fw-bold">completato</span>
-                            ) : (
-                                <span className="text-danger fw-bold"> non completato</span>
-                            )}{" "}
-                        </Card.Text>
-                        <Button
-                            onClick={() => {
-                                navigate(`/login/singleNote/${note._id}`);
-                            }}
-                            variant="primary"
-                        >
-                            More Info
-                        </Button>
-                    </Card.Body>
-                </Card>
-            </>
-        ));
+                {notes.map((note) => (
+                    <Card key={`${note._id}`}>
+                        <Card.Body>
+                            <Card.Title>{note.title}</Card.Title>
+                            <Card.Text>{note.text}</Card.Text>
+                            <Card.Text>
+                                Stato nota :{" "}
+                                {note.isCompleted ? (
+                                    <span className="text-success fw-bold">completato</span>
+                                ) : (
+                                    <span className="text-danger fw-bold"> non completato</span>
+                                )}
+                            </Card.Text>
+                            <Button
+                                onClick={() => {
+                                    navigate(`/login/singleNote/${note._id}`);
+                                }}
+                                variant="primary"
+                            >
+                                More Info
+                            </Button>
+                        </Card.Body>
+                    </Card>
+                ))}
+            </div>
+        );
     }
 
     if (notes && notes.length <= 0) {

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-
+import { MdChangeCircle } from "react-icons/md";
 const FooterComp = () => {
     const UserToken = useSelector((store: RootState) => store.token.token);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,12 +58,15 @@ const FooterComp = () => {
                             <span className="fw-bold fs-5">
                                 {UserToken && decodedToken && renderStatus(decodedToken)}
                             </span>
+                            <span className="ms-2">
+                                <MdChangeCircle className="pointer" size={25} />
+                            </span>
                         </p>
                     </div>
                 </footer>
             </Col>
             <Col>
-                <div className="d-flex align-items-center h-100 justify-content-around">
+                <div className="d-flex align-items-center h-100 justify-content-around mb-3">
                     {" "}
                     {decodedToken && (
                         <div>
