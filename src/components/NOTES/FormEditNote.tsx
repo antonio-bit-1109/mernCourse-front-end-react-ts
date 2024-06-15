@@ -20,7 +20,7 @@ export interface IProps {
 
 const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText, asyncActions }: IProps) => {
     const param = useParams<{ idNote: string }>();
-    const { token } = useSelector((store: RootState) => store.token);
+    const { accessToken } = useSelector((store: RootState) => store.token);
     const [IdUser, setIdUser] = useState<string>("");
 
     // hook per modificare la singola nota
@@ -38,9 +38,9 @@ const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText, asyn
     };
 
     useEffect(() => {
-        if (token) {
-            const tokenDecripted = decriptToken(token) as IDecodedTokenStructure;
-            setIdUser(tokenDecripted.id);
+        if (accessToken) {
+            const tokenDecripted = decriptToken(accessToken) as IDecodedTokenStructure;
+            setIdUser(tokenDecripted.UserInfo.userId);
         } else {
             setIdUser("");
             console.error(" errore nella decriptazione del token in formEditNote.tsx");

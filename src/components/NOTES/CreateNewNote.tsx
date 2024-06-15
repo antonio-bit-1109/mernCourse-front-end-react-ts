@@ -11,14 +11,14 @@ import EsitoCreateNewNote from "./EsitoCreateNewNote";
 
 const CreateNewNote = () => {
     const navigate = useNavigate();
-    const { token } = useSelector((store: RootState) => store.token);
+    const { accessToken } = useSelector((store: RootState) => store.token);
     const [decriptedUserID, setDecriptedUserID] = useState<string | null>(null);
 
     const [createNewNote, { isError, isLoading, isSuccess, data }] = useCreateNewNoteMutation();
 
     useEffect(() => {
-        if (token) {
-            const userID = decriptToken(token);
+        if (accessToken) {
+            const userID = decriptToken(accessToken);
             if (userID) {
                 setDecriptedUserID(userID);
             }
@@ -28,7 +28,7 @@ const CreateNewNote = () => {
 
     const decriptToken = (string: string) => {
         const decriptedToken: IDecodedTokenStructure = jwtDecode(string);
-        return decriptedToken.id;
+        return decriptedToken.UserInfo.userId;
     };
 
     const {
