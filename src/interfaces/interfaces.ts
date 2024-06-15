@@ -5,12 +5,13 @@ export interface MainState_Interface {
 }
 
 export interface IDecodedTokenStructure {
+    UserInfo: {
+        userId: string;
+        username: string;
+        roles: string[];
+    };
     exp: number;
     iat: number;
-    id: string;
-    name: string;
-    status: boolean;
-    roles: string[];
 }
 
 // ------ destrutturazione degli oggetti ritornati dal createAPi di redux---------

@@ -4,7 +4,7 @@ import { LocalHostPath } from "../../../functions/LocalHostPath";
 
 // builder.query/mutation< RISPOSTA DELL API   ,   PARAMETRO INVIATO NEL BODY  >
 export interface Itoken {
-    token: string;
+    accessToken: string;
 }
 
 export interface DataAutentication {
@@ -19,7 +19,7 @@ export const TokenApi = createApi({
         //POST
         Autentication: builder.mutation<Itoken, DataAutentication>({
             query: (UserData) => ({
-                url: "/Login",
+                url: "/Auth",
                 method: "POST",
                 body: UserData,
             }),

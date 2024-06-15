@@ -12,7 +12,7 @@ import FormEditNote from "./FormEditNote";
 const FetchSingleNote = () => {
     const navigate = useNavigate();
     const param = useParams<{ idNote: string }>();
-    const { token } = useSelector((store: RootState) => store.token);
+    const { accessToken } = useSelector((store: RootState) => store.token);
     const [idUser, setIdUser] = useState<string | null>(null);
     const [EditFormsIsVisible, setEditFormIsVisible] = useState<boolean>(false);
 
@@ -24,16 +24,15 @@ const FetchSingleNote = () => {
 
     const decodingToken = useCallback(
         function () {
-            if (token !== null) {
-                const decodedToken = jwtDecode(token) as IDecodedTokenStructure;
-                console.log(decodedToken);
-                return decodedToken.id;
+            if (accessToken !== null) {
+                const decodedToken = jwtDecode(accessToken) as IDecodedTokenStructure;
+                return decodedToken.UserInfo.userId;
             }
-            if (!token) {
+            if (!accessToken) {
                 return null;
             }
         },
-        [token]
+        [accessToken]
     );
 
     const asyncActions = useCallback(

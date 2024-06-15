@@ -1,18 +1,18 @@
 import { Button, Col } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { MdChangeCircle } from "react-icons/md";
 import { useSoftDeleteUserMutation } from "../../redux/app/api/usersApiSlice";
-import { clearToken } from "../../redux/app/traditionalSlices/tokenReducer";
+import { IDecodedTokenStructure } from "../../interfaces/interfaces";
 
 const FooterComp = () => {
-    const dispatch = useDispatch();
-    const UserToken = useSelector((store: RootState) => store.token.token);
+    // const dispatch = useDispatch();
+    const { accessToken } = useSelector((store: RootState) => store.token);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [decodedToken, setDecodedToken] = useState<any>(null);
+    const [decodedToken, setDecodedToken] = useState<IDecodedTokenStructure | null>(null);
     const navigate = useNavigate();
 
     const date = new Date();
@@ -23,14 +23,14 @@ const FooterComp = () => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
 
-    const [softDeleteFetch, { isLoading, isSuccess, isError }] = useSoftDeleteUserMutation();
+    const [softDeleteFetch] = useSoftDeleteUserMutation();
 
     useEffect(() => {
-        if (UserToken) {
-            const tokenDecripted = jwtDecode(UserToken);
+        if (accessToken) {
+            const tokenDecripted = jwtDecode(accessToken) as IDecodedTokenStructure;
             setDecodedToken(tokenDecripted);
         }
-    }, [UserToken]);
+    }, [accessToken]);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const renderStatus = (decodedToken: any) => {
@@ -45,7 +45,11 @@ const FooterComp = () => {
     };
 
     const deactivateUser = async () => {
-        await softDeleteFetch({ id: decodedToken.id });
+        if (decodedToken?.UserInfo.userId) {
+            await softDeleteFetch({ id: decodedToken?.UserInfo.userId });
+        } else {
+            console.error("l' ID utente estratto dal token è nullo o undefined.");
+        }
     };
 
     return (
@@ -61,15 +65,19 @@ const FooterComp = () => {
                     <div>
                         <p>
                             Current User:{" "}
-                            <span className="fw-bold fs-5">{UserToken && decodedToken && decodedToken.name}</span>
+                            <span className="fw-bold fs-5">
+                                {accessToken && decodedToken && decodedToken.UserInfo.username}
+                            </span>
                         </p>
                         <p>
                             Status:{" "}
                             <span className="fw-bold fs-5">
-                                {UserToken && decodedToken && renderStatus(decodedToken)}
+                                {accessToken && decodedToken && renderStatus(decodedToken)}
                             </span>
                             <span className="ms-2">
-                                {UserToken && <MdChangeCircle onClick={deactivateUser} className="pointer" size={25} />}
+                                {accessToken && (
+                                    <MdChangeCircle onClick={deactivateUser} className="pointer" size={25} />
+                                )}
                             </span>
                         </p>
                     </div>
@@ -78,7 +86,7 @@ const FooterComp = () => {
             <Col>
                 <div className="d-flex align-items-center h-100 justify-content-around mb-3">
                     {" "}
-                    {UserToken && (
+                    {accessToken && (
                         <div>
                             <Button
                                 onClick={() => {
@@ -89,7 +97,7 @@ const FooterComp = () => {
                             </Button>
                         </div>
                     )}
-                    {UserToken && decodedToken && decodedToken.roles.includes("admin") && (
+                    {accessToken && decodedToken && decodedToken.UserInfo.roles.includes("admin") && (
                         <div>
                             <Button
                                 onClick={() => {

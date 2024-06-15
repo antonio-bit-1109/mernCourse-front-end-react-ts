@@ -5,33 +5,34 @@ import { RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { IDecodedTokenStructure } from "../../interfaces/interfaces";
 const FetchSingleUser = () => {
     const navigate = useNavigate();
-    const { token } = useSelector((store: RootState) => store.token);
+    const { accessToken } = useSelector((store: RootState) => store.token);
     const [fetchSingleUser, { data: user, error, isLoading }] = useGetSingleUserMutation();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [decodedToken, setDecodedToken] = useState<any>(null);
+    const [decodedToken, setDecodedToken] = useState<IDecodedTokenStructure | null>(null);
 
     useEffect(() => {
-        if (!token) {
+        if (!accessToken) {
             navigate("/");
         }
-    }, [navigate, token]);
+    }, [navigate, accessToken]);
 
     useEffect(() => {
         if (decodedToken) {
-            fetchSingleUser({ id: decodedToken.id });
+            fetchSingleUser({ id: decodedToken.UserInfo.userId });
         }
     }, [decodedToken, fetchSingleUser]);
 
     useEffect(() => {
-        if (token) {
-            const tokenDecripted = jwtDecode(token);
+        if (accessToken) {
+            const tokenDecripted = jwtDecode(accessToken) as IDecodedTokenStructure;
             console.log(tokenDecripted);
             setDecodedToken(tokenDecripted);
         }
-    }, [token]);
+    }, [accessToken]);
 
     if (isLoading) {
         return <div>Loading...</div>;

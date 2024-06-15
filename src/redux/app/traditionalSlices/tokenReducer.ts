@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { TokenApi } from "../api/tokenApiSlice";
 
 interface TokenState {
-    token: string | null;
+    accessToken: string | null;
 }
 
 const initialState: TokenState = {
-    token: null,
+    accessToken: null,
 };
 
 export const tokenSlice = createSlice({
@@ -15,7 +15,7 @@ export const tokenSlice = createSlice({
     initialState,
     reducers: {
         clearToken: (state) => {
-            state.token = null;
+            state.accessToken = null;
         },
     },
 
@@ -24,7 +24,7 @@ export const tokenSlice = createSlice({
     //-- matchRejected : ogni volta che la fetch autentication ritorna un valore di rejected quindi di errore nella maggior parte dei casi ,salva quel payload nello state specificato nella funzione
     extraReducers: (builder) => {
         builder.addMatcher(TokenApi.endpoints.Autentication.matchFulfilled, (state, { payload }) => {
-            state.token = payload.token;
+            state.accessToken = payload.accessToken;
         });
     },
 });

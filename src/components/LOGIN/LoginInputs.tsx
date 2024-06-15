@@ -9,17 +9,17 @@ import { RootState } from "../../redux/store";
 
 const LoginInputs = () => {
     const navigate = useNavigate();
-    const UserToken = useSelector((store: RootState) => store.token.token);
+    const { accessToken } = useSelector((store: RootState) => store.token);
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
     const [autenticate, { data: token, isLoading, error, status }] = useAutenticationMutation();
 
     useEffect(() => {
-        if (UserToken) {
+        if (accessToken) {
             navigate("singleUser");
         }
-    }, [navigate, UserToken]);
+    }, [navigate, accessToken]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
