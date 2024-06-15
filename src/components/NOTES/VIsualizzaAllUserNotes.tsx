@@ -10,21 +10,20 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 const VIsualizzaNote = () => {
     const navigate = useNavigate();
-    const { token } = useSelector((store: RootState) => store.token);
+    const { accessToken } = useSelector((store: RootState) => store.token);
     const [userId, setUserId] = useState<string>("");
 
     const { data: notes, error, isLoading, refetch } = useGetAllUserNotesQuery(userId);
-    const [deleteNoteFetch, { isLoading: delIsLoading, isSuccess: delIsSuccess, isError: delIsError, data: delData }] =
-        useDeleteNoteMutation();
+    const [deleteNoteFetch, { isSuccess: delIsSuccess, isError: delIsError }] = useDeleteNoteMutation();
 
     const decriptToken = (token: string) => {
         const decodedToken: IDecodedTokenStructure = jwtDecode(token);
-        return decodedToken.id;
+        return decodedToken.UserInfo.userId;
     };
 
     useEffect(() => {
-        if (token) {
-            const userIdDecripted = decriptToken(token);
+        if (accessToken) {
+            const userIdDecripted = decriptToken(accessToken);
             setUserId(userIdDecripted);
             return;
         }
@@ -38,12 +37,12 @@ const VIsualizzaNote = () => {
     }, [userId, refetch]);
 
     useEffect(() => {
-        if (token) {
-            const userIdDecripted = decriptToken(token);
+        if (accessToken) {
+            const userIdDecripted = decriptToken(accessToken);
             setUserId(userIdDecripted);
             return;
         }
-    }, [token]);
+    }, [accessToken]);
 
     useEffect(() => {
         if (delIsSuccess) {
