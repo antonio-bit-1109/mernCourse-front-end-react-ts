@@ -40,8 +40,9 @@ export const store = configureStore({
 // Dopo la definizione dello store e di persistor
 
 // Utilizza ReturnType sulla funzione getState dello store per ottenere il tipo di stato completo
+// export type RootState = ReturnType<typeof store.getState>;
 export type RootState = ReturnType<typeof store.getState>;
-
+export type AppDispatch = typeof store.dispatch;
 // export const store = configureStore({
 //     reducer: {
 //         [UsersApi.reducerPath]: UsersApi.reducer,

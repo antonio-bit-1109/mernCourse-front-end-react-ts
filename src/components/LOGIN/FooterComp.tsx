@@ -33,11 +33,11 @@ const FooterComp = () => {
     }, [accessToken]);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const renderStatus = (decodedToken: any) => {
-        if (decodedToken.isActive) {
+    const renderStatus = (decodedToken: IDecodedTokenStructure) => {
+        if (decodedToken.UserInfo.active) {
             return "Attivo";
         }
-        if (!decodedToken.isActive) {
+        if (!decodedToken.UserInfo.active) {
             return "Inattivo";
         }
 

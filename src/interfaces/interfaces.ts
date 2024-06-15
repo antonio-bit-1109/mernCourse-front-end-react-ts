@@ -9,6 +9,7 @@ export interface IDecodedTokenStructure {
         userId: string;
         username: string;
         roles: string[];
+        active: boolean;
     };
     exp: number;
     iat: number;
