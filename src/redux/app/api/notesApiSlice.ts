@@ -114,6 +114,14 @@ export const NotesApi = createApi({
                 body: { NoteId },
             }),
         }),
+
+        uncheckNoteCompleted: builder.mutation<{ message: string }, { UserId: string; NoteId: string }>({
+            query: ({ NoteId, UserId }) => ({
+                url: `/Notes/uncheckNote/${UserId}`,
+                method: "POST",
+                body: { NoteId },
+            }),
+        }),
     }),
 });
 
@@ -124,4 +132,5 @@ export const {
     useDeleteNoteMutation,
     useGetSingleNoteMutation,
     useCheckCompletedNoteMutation,
+    useUncheckNoteCompletedMutation,
 } = NotesApi;

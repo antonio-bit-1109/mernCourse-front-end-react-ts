@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Form } from "react-bootstrap";
-import { useCheckCompletedNoteMutation, useEditNoteMutation } from "../../redux/app/api/notesApiSlice";
+import {
+    useCheckCompletedNoteMutation,
+    useEditNoteMutation,
+    useUncheckNoteCompletedMutation,
+} from "../../redux/app/api/notesApiSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { jwtDecode } from "jwt-decode";
 import { IDecodedTokenStructure } from "../../interfaces/interfaces";
 import { useParams } from "react-router-dom";
 import { MdDoneOutline } from "react-icons/md";
+import { VscError } from "react-icons/vsc";
 
 export interface IProps {
     EditFormsIsVisible: boolean;
@@ -29,8 +34,24 @@ const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText, asyn
     //hook per impostare la singola nota come completata
     const [
         checkCompletedNote,
-        { data: respNoteCompleted, error: errorNoteCompleted, isLoading: isLoadingNoteCompleted },
+        {
+            isSuccess: isSuccessCheckCompleted,
+            data: checkDataComplete,
+            isError: isErrorNoteCompleted,
+            isLoading: isLoadingNoteCompleted,
+        },
     ] = useCheckCompletedNoteMutation();
+
+    // hook per rimuovere il check dalla nota
+    const [
+        uncheckNote,
+        {
+            isLoading: isUncheckLoading,
+            isError: isUNcheckError,
+            isSuccess: isUncheckSuccess,
+            data: uncheckDataComplete,
+        },
+    ] = useUncheckNoteCompletedMutation();
 
     const decriptToken = (token: string) => {
         const decriptedToken = jwtDecode(token);
@@ -73,6 +94,15 @@ const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText, asyn
             return;
         }
         await checkCompletedNote({ UserId: IdUser, NoteId: param.idNote });
+        await asyncActions();
+    };
+
+    const uncheckNoteCompleted = async () => {
+        if (!IdUser || !param.idNote) {
+            console.error(" errore Durante l'uncheck della nota. idUser o idnote non sono valori accettati.");
+            return;
+        }
+        await uncheckNote({ UserId: IdUser, NoteId: param.idNote });
         await asyncActions();
     };
 
@@ -123,9 +153,15 @@ const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText, asyn
                     {" "}
                     <div
                         onClick={checkNoteAsCompleted}
-                        className="d-flex justify-content-end bg-black ms-5 w-100 circle pointer"
+                        className="d-flex justify-content-end bg-black ms-5 circle pointer mb-3"
                     >
                         <MdDoneOutline className="p-3" color="green" size={80} />
+                    </div>
+                    <div
+                        onClick={uncheckNoteCompleted}
+                        className="d-flex justify-content-end bg-black ms-5 circle pointer"
+                    >
+                        <VscError className="p-3" color="red" size={80} />
                     </div>
                 </Col>
             </div>
@@ -145,22 +181,27 @@ const FormEditNote = ({ EditFormsIsVisible, title, text, setTitle, setText, asyn
                         <div>
                             <p className="text-center">caricamento...</p>
                         </div>
-                    )}{" "}
-                    {respNoteCompleted && (
-                        <div>
-                            <p className="text-center">{respNoteCompleted.message}</p>
-                        </div>
                     )}
-                    {errorNoteCompleted && (
-                        <div>
-                            <p className="text-center">errore durante il completamento della nota.</p>
-                        </div>
-                    )}
-                    {isLoadingNoteCompleted && (
-                        <div>
-                            <p className="text-center">caricamento...</p>
-                        </div>
-                    )}{" "}
+                    {isSuccessCheckCompleted ||
+                        (isUncheckSuccess && (
+                            <div>
+                                <p className="text-center">
+                                    {checkDataComplete?.message || uncheckDataComplete?.message}
+                                </p>
+                            </div>
+                        ))}
+                    {isErrorNoteCompleted ||
+                        (isUNcheckError && (
+                            <div>
+                                <p className="text-center">errore durante il completamento della nota.</p>
+                            </div>
+                        ))}
+                    {isLoadingNoteCompleted ||
+                        (isUncheckLoading && (
+                            <div>
+                                <p className="text-center">caricamento...</p>
+                            </div>
+                        ))}{" "}
                 </Col>
             </div>
         </>
