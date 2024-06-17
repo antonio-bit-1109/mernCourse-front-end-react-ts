@@ -13,7 +13,7 @@ const VIsualizzaNote = () => {
     const { accessToken } = useSelector((store: RootState) => store.token);
     const [userId, setUserId] = useState<string>("");
 
-    const { data: notes, error, isLoading, refetch } = useGetAllUserNotesQuery(userId);
+    const { data: notes, error, isLoading, refetch } = useGetAllUserNotesQuery(userId, { skip: !userId });
     const [deleteNoteFetch, { isSuccess: delIsSuccess, isError: delIsError }] = useDeleteNoteMutation();
 
     const decriptToken = (token: string) => {

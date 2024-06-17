@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { setCredentials } from "../../redux/app/traditionalSlices/tokenReducer";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const EsitoLoginUtente: React.FC<any> = ({ error, isLoading, token }) => {
+    const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
 
     const [loading, SetLoadig] = useState<string>("");
     const [errorState, SetErrorState] = useState<string>("");
+
     useEffect(() => {
         if (isLoading) {
             SetLoadig(isLoading);
@@ -20,11 +25,12 @@ const EsitoLoginUtente: React.FC<any> = ({ error, isLoading, token }) => {
         }
 
         if (token) {
+            dispatch(setCredentials(token.accessToken));
             setTimeout(() => {
                 navigate("/singleUser");
             }, 2000);
         }
-    }, [token, error, isLoading, navigate]);
+    }, [token, error, isLoading, navigate, dispatch]);
 
     return (
         <>

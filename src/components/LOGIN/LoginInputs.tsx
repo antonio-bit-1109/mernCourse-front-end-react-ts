@@ -1,7 +1,7 @@
 import { Button, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import { useAutenticationMutation } from "../../redux/app/api/tokenApiSlice";
+import { useLoginMutation } from "../../redux/app/api/tokenApiSlice";
 import EsitoLoginUtente from "./EsitoLoginUtente";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -13,7 +13,7 @@ const LoginInputs = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    const [autenticate, { data: token, isLoading, error, status }] = useAutenticationMutation();
+    const [autenticate, { data: token, isLoading, error }] = useLoginMutation();
 
     useEffect(() => {
         if (accessToken) {
@@ -24,10 +24,6 @@ const LoginInputs = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await autenticate({ usernameBody: username, passwordBody: password });
-
-        if (status === "fulfilled") {
-            navigate("/singleUser");
-        }
     };
 
     return (

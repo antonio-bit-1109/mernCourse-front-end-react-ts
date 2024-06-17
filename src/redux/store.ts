@@ -6,36 +6,50 @@ import tokenReducer from "./app/traditionalSlices/tokenReducer";
 
 // import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import { NotesApi } from "./app/api/notesApiSlice";
+import listenerMiddleware from "./middleware/stateListener";
+import persistReducer from "redux-persist/es/persistReducer";
+// import expireReducer from "redux-persist-expire";
+import storage from "redux-persist/lib/storage";
+import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import persistStore from "redux-persist/es/persistStore";
 // import expireReducer from "redux-persist-expire";
 
-// const persistConfig = {
-//     key: "root",
-//     storage,
-//     whitelist: ["token"], // Nome del reducer che desideri persistere
-//     transform: [
-//         expireReducer("token", {
-//             expireSeconds: 60 * 60 * 24 * 7,
-//             expiredState: { token: null },
-//             autoExpire: true,
-//         }),
-//     ],
-// };
+const persistConfig = {
+    key: "root",
+    storage,
+    whitelist: ["accessToken"], // Nome del reducer che desideri persistere
+    // transform: [
+    //     expireReducer("token", {
+    //         expireSeconds: 60 * 60 * 24 * 7,
+    //         expiredState: { accessToken: null },
+    //         autoExpire: true,
+    //     }),
+    // ],
+};
 
-// const persistedReducer = persistReducer(persistConfig, tokenReducer);
+const persistedReducer = persistReducer(persistConfig, tokenReducer);
 
 export const store = configureStore({
     reducer: {
         [UsersApi.reducerPath]: UsersApi.reducer,
         [TokenApi.reducerPath]: TokenApi.reducer,
         [NotesApi.reducerPath]: NotesApi.reducer,
-        token: tokenReducer,
+        token: persistedReducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({}).concat(UsersApi.middleware).concat(TokenApi.middleware).concat(NotesApi.middleware),
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        })
+            .prepend(listenerMiddleware.middleware)
+            .concat(UsersApi.middleware)
+            .concat(TokenApi.middleware)
+            .concat(NotesApi.middleware),
     devTools: true,
 });
 
-// export const persistor = persistStore(store);
+export const persistor = persistStore(store);
 
 // Dopo la definizione dello store e di persistor
 
