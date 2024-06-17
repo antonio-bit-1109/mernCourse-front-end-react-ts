@@ -36,11 +36,6 @@ export interface IEditNoteBody {
     };
 }
 
-// export interface IDeleteNoteBody {
-//     IdNote: string;
-//     UserId: string;
-// }
-
 export interface IbodyData {
     userId: string;
     bodyData: {
