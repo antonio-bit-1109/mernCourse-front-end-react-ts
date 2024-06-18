@@ -12,6 +12,7 @@ import persistReducer from "redux-persist/es/persistReducer";
 import storage from "redux-persist/lib/storage";
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import persistStore from "redux-persist/es/persistStore";
+import userReducer from "./app/traditionalSlices/userReducer";
 // import expireReducer from "redux-persist-expire";
 
 const persistConfig = {
@@ -35,6 +36,7 @@ export const store = configureStore({
         [TokenApi.reducerPath]: TokenApi.reducer,
         [NotesApi.reducerPath]: NotesApi.reducer,
         token: persistedReducer,
+        user: userReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

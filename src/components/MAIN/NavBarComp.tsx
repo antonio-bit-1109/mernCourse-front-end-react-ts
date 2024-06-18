@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 // import { useDispatch } from "react-redux";
 // import { AppDispatch } from "../../redux/store";
 import { useSendLogoutMutation } from "../../redux/app/api/tokenApiSlice";
+import { RiLogoutBoxFill } from "react-icons/ri";
 
 const NavBarComp = () => {
     const navigate = useNavigate();
@@ -38,21 +39,13 @@ const NavBarComp = () => {
                             Home
                         </p>
                         <p
-                            onClick={() => {
-                                navigate("/AllUsers");
-                            }}
-                            className=" text-light m-0"
-                        >
-                            Get all users
-                        </p>
-                        <p
                             className="text-light m-0 ms-auto"
                             onClick={() => {
                                 doLogOut(null);
                                 navigate("/");
                             }}
                         >
-                            LogOut
+                            <RiLogoutBoxFill size={25} />
                         </p>
                     </div>
                 </Container>

@@ -63,6 +63,14 @@ const FetchSingleUser = () => {
                             >
                                 visualizza note
                             </Button>
+                            <Button
+                                onClick={() => {
+                                    navigate("/AllUsers");
+                                }}
+                                className=" text-light m-0 mx-2"
+                            >
+                                Get all users
+                            </Button>
                         </div>
                     </>
                 )}

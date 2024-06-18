@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LocalHostPath } from "../../../functions/LocalHostPath";
 import { RootState } from "../../store";
+// import { SerializedError } from "@reduxjs/toolkit";
 // import { useSelector } from "react-redux";
 // import Header from "../../../components/MAIN/Header";
 //funzione del toolkit per scrivere delle fetch parametriche. e ritornare in automatico le risposte.
@@ -23,7 +24,11 @@ export interface Ireply {
     message: string;
 }
 
-// builder.query/mutation< RISPOSTA DELL API   ,   PARAMETRO che si aspetta la query   >
+// export type SuccessResponse = IUser[];
+// export type ErrorResponse = FetchBaseQueryError | SerializedError;
+// export type QueryResponse = SuccessResponse | ErrorResponse;
+
+// builder.query/mutation< RISPOSTA DELL API IN CASO DI SUCCESSO  ,   PARAMETRO che si aspetta la query   >
 
 export const UsersApi = createApi({
     reducerPath: "UserApi",
@@ -39,7 +44,7 @@ export const UsersApi = createApi({
     }),
     endpoints: (builder) => ({
         //GET
-        getAllUsers: builder.query<IUser[], void>({
+        getAllUsers: builder.query<IUser[], null>({
             query: () => "/Users",
         }),
         //POST
