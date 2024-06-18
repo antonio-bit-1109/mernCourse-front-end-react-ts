@@ -45,7 +45,7 @@ const EditSingleUser = () => {
             <Col sm="10" md="6">
                 {/* //form nel quale inserire i dati dell utente da modificare */}
                 <div className="my-4">
-                    {" "}
+                    <h2>Modifica Utente</h2>
                     <Form>
                         <Form.Group hidden className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Id</Form.Label>
