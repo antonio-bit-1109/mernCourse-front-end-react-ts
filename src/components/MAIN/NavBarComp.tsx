@@ -20,11 +20,10 @@ const NavBarComp = () => {
                             onClick={() => {
                                 navigate("/");
                             }}
-                            alt=""
-                            src={LocalHostPath + "/imgs/sorryImg.png"}
+                            src={LocalHostPath + "/imgs/default.png"}
                             width="30"
                             height="30"
-                            className="d-inline-block align-top"
+                            className="d-inline-block align-top bg-light pointer"
                         />{" "}
                     </Navbar.Brand>
                     <div className="d-flex gap-2 w-100">

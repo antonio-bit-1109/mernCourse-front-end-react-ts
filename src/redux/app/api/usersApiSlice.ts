@@ -12,6 +12,7 @@ export interface IUser {
     roles: string[];
     active: boolean;
     __v: number;
+    imageProfile: string;
 }
 
 export interface ICreateUserBody {
@@ -87,6 +88,14 @@ export const UsersApi = createApi({
                 body: userId,
             }),
         }),
+
+        changeImageProfile: builder.mutation<any, { userId: string; StringImage: FormData }>({
+            query: ({ userId, StringImage }) => ({
+                url: `Users/uploadUserImg/${userId}`,
+                method: "PATCH",
+                body: StringImage,
+            }),
+        }),
     }),
 });
 
@@ -97,4 +106,5 @@ export const {
     useDeleteUserMutation,
     useGetSingleUserMutation,
     useSoftDeleteUserMutation,
+    useChangeImageProfileMutation,
 } = UsersApi;

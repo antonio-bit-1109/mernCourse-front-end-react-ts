@@ -18,6 +18,7 @@ import FetchSingleUserNote from "./components/NOTES/FetchSingleUserNote";
 import CreateNewUser from "./components/LOGIN/CreateNewUser";
 import CreateNewNote from "./components/NOTES/CreateNewNote";
 import EditSingleUser from "./components/USERS/EditSingleUser";
+import ChangeUserImgProfile from "./components/USERS/ChangeUserImgProfile";
 
 function App() {
     return (
@@ -38,6 +39,7 @@ function App() {
                     <Route path="singleNote/:idNote" element={<FetchSingleUserNote />} />
                     <Route path="editSingleUser" element={<EditSingleUser />} />
                     <Route path="allUsers" element={<AllUsersComp />} />
+                    <Route path="changeImg" element={<ChangeUserImgProfile />} />
                 </Route>
             </Routes>
         </BrowserRouter>

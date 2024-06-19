@@ -1,13 +1,18 @@
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Col } from "react-bootstrap";
 import { useGetSingleUserMutation } from "../../redux/app/api/usersApiSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { IDecodedTokenStructure } from "../../interfaces/interfaces";
+import { LocalHostPath } from "../../functions/LocalHostPath";
+import { FcEditImage } from "react-icons/fc";
+import { setLoggedUser } from "../../redux/app/traditionalSlices/userReducer";
+
 const FetchSingleUser = () => {
     const navigate = useNavigate();
+    const dispatch: AppDispatch = useDispatch();
     const { accessToken } = useSelector((store: RootState) => store.token);
     const [fetchSingleUser, { data: user, error, isLoading }] = useGetSingleUserMutation();
 
@@ -34,6 +39,13 @@ const FetchSingleUser = () => {
         }
     }, [accessToken]);
 
+    // quando ritorna la risposta dalla fetch con lo user e questo è truty lo salvo in redux.
+    useEffect(() => {
+        if (user) {
+            dispatch(setLoggedUser(user));
+        }
+    }, [user, dispatch]);
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -43,16 +55,27 @@ const FetchSingleUser = () => {
     }
 
     if (user) {
-        console.log(user);
         return (
-            <>
+            <Col xs="10" md="6">
                 {user && (
                     <>
-                        <Card key={user._id}>
+                        <Card className="position-relative" key={user._id}>
                             <Card.Body>
+                                <img
+                                    src={`${LocalHostPath}/imgs/${user.imageProfile}`}
+                                    alt="immagine profilo"
+                                    className=" img-thumbnail"
+                                />
                                 <Card.Title>{user.username}</Card.Title>
                                 <Card.Text>{user.roles.join(", ")}</Card.Text>
                             </Card.Body>
+                            <FcEditImage
+                                onClick={() => {
+                                    navigate("/changeImg");
+                                }}
+                                className="absolute-position-0 pointer"
+                                size={40}
+                            />
                         </Card>
 
                         <div>
@@ -76,7 +99,7 @@ const FetchSingleUser = () => {
                         </div>
                     </>
                 )}
-            </>
+            </Col>
         );
     }
 

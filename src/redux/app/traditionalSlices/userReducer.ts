@@ -7,10 +7,12 @@ import { IUser } from "../api/usersApiSlice";
 
 interface UserState {
     userToEdit: IUser | null;
+    loggedUser: IUser | null;
 }
 
 const initialState: UserState = {
     userToEdit: null,
+    loggedUser: null,
 };
 
 export const userSlice = createSlice({
@@ -20,10 +22,14 @@ export const userSlice = createSlice({
         setUserToEdit: (state, action) => {
             state.userToEdit = action.payload;
         },
+
+        setLoggedUser: (state, action) => {
+            state.loggedUser = action.payload;
+        },
     },
 });
 
-export const { setUserToEdit } = userSlice.actions;
+export const { setUserToEdit, setLoggedUser } = userSlice.actions;
 
 export default userSlice.reducer;
 
