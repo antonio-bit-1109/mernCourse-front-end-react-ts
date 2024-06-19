@@ -37,9 +37,8 @@ function App() {
                     <Route path="singleUser" element={<FetchSingleUser />} />
                     <Route path="singleNote/:idNote" element={<FetchSingleUserNote />} />
                     <Route path="editSingleUser" element={<EditSingleUser />} />
+                    <Route path="allUsers" element={<AllUsersComp />} />
                 </Route>
-
-                <Route path="/allUsers" element={<AllUsersComp />} />
             </Routes>
         </BrowserRouter>
     );

@@ -2,14 +2,15 @@ import { Button, Card, Col } from "react-bootstrap";
 import { useGetAllUsersQuery } from "../../redux/app/api/usersApiSlice";
 import Spinner from "react-bootstrap/Spinner";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 import { setUserToEdit } from "../../redux/app/traditionalSlices/userReducer";
+import { ICustomError } from "../../interfaces/interfaces";
+import { useEffect } from "react";
 
 const AllUsersComp = () => {
     const navigate = useNavigate();
     const dispatch: AppDispatch = useDispatch();
-    const { userToEdit } = useSelector((store: RootState) => store.user);
     const {
         isLoading,
         isSuccess,
@@ -21,6 +22,21 @@ const AllUsersComp = () => {
         refetchOnReconnect: true,
         refetchOnMountOrArgChange: true,
     });
+
+    // se si mostra l'errore di ritorno dalla fetch dopo 2 secodni ritorna alla pagina precedente
+    useEffect(() => {
+        let intervalId: ReturnType<typeof setTimeout>;
+
+        if (AllUserError) {
+            intervalId = setTimeout(() => {
+                navigate(-1);
+            }, 2000);
+        }
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [AllUserError, navigate]);
 
     if (isLoading) {
         return (
@@ -34,14 +50,10 @@ const AllUsersComp = () => {
     }
 
     if (isError) {
-        // Check if AllUserError is FetchBaseQueryError and has a non-null data property
-        if (AllUserError.data) {
-            // Safely access message, assuming it's a string. You might still need to check if message exists.
-            const message = AllUserError.data.message;
-            return <div>{message}</div>;
+        if (AllUserError) {
+            const thisError = AllUserError as ICustomError;
+            return <div>{thisError.data.message}</div>;
         }
-
-        return null;
     }
 
     if (isSuccess) {
@@ -56,7 +68,7 @@ const AllUsersComp = () => {
                 </Button>
                 <div>
                     {data.map((user, i) => (
-                        <Card key={`card-key-${user.__v + i}`}>
+                        <Card key={`card-key-${user._id + i}`}>
                             <Card.Body>
                                 <Card.Title>{user.username}</Card.Title>
                                 <Card.Text>
@@ -67,9 +79,7 @@ const AllUsersComp = () => {
                                 <Button
                                     onClick={() => {
                                         dispatch(setUserToEdit(user));
-                                        if (userToEdit) {
-                                            navigate("/editSingleUser");
-                                        }
+                                        navigate("/editSingleUser");
                                     }}
                                     variant="primary"
                                 >

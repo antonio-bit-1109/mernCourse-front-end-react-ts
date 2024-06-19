@@ -2,25 +2,29 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { Button, Col, Form } from "react-bootstrap";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { FaDeleteLeft } from "react-icons/fa6";
+import { useEditUserMutation } from "../../redux/app/api/usersApiSlice";
+import EsitoEditUser from "./EsitoEditUser";
 
 const EditSingleUser = () => {
     const navigate = useNavigate();
     const { userToEdit } = useSelector((store: RootState) => store.user);
 
+    const [AllRoles] = useState<string[]>(["admin", "impiegato", "ladro"]);
     const [id, setId] = useState<null | string>(null);
     const [username, setUsername] = useState<null | string>(null);
     const [roles, setRoles] = useState<null | string[]>(null);
     const [isActive, setIsActive] = useState<null | boolean>(null);
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        watch,
-        reset,
-    } = useForm();
+    const [editUser, { isSuccess, isError, isLoading, error, data }] = useEditUserMutation();
+    // const {
+    //     register,
+    //     handleSubmit,
+    //     formState: { errors },
+    //     watch,
+    //     reset,
+    // } = useForm();
 
     useEffect(() => {
         if (userToEdit) {
@@ -31,6 +35,33 @@ const EditSingleUser = () => {
         }
     }, [userToEdit]);
 
+    const impostaRuolo = (stringaRuolo: string, array: string[] | null) => {
+        if (!array) {
+            console.log("roles è null.");
+            return;
+        }
+        if (!array.includes(stringaRuolo)) {
+            const newArray = [...array];
+            newArray.push(stringaRuolo);
+            setRoles(newArray);
+            return;
+        }
+        console.log("ruolo già inserito.");
+        return;
+    };
+    //
+    const handleDelete = (index: number, array: string[]) => {
+        const newArray = [...array];
+        newArray.splice(index, 1);
+        setRoles(newArray);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (username && id && Array.isArray(roles) && isActive) {
+            editUser({ id: id, username: username, roles: roles, active: isActive });
+        }
+    };
     return (
         <>
             <Col>
@@ -46,25 +77,86 @@ const EditSingleUser = () => {
                 {/* //form nel quale inserire i dati dell utente da modificare */}
                 <div className="my-4">
                     <h2>Modifica Utente</h2>
-                    <Form>
+                    <Form
+                        onSubmit={(e) => {
+                            handleSubmit(e);
+                        }}
+                    >
+                        {/* //id utente */}
                         <Form.Group hidden className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Id</Form.Label>
-                            <Form.Control value={id ?? ""} type="text" placeholder="name@example.com" />
+                            <Form.Control readOnly value={id ?? ""} type="text" placeholder="name@example.com" />
                         </Form.Group>
+                        {/* username */}
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Username</Form.Label>
-                            <Form.Control type="text" value={username ?? ""} />
+                            <Form.Control
+                                type="text"
+                                value={username ?? ""}
+                                onChange={(e) => {
+                                    setUsername(e.target.value);
+                                }}
+                            />
                         </Form.Group>{" "}
+                        {/* ruoli */}
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Ruoli</Form.Label>
-                            <Form.Control value={Array.isArray(roles) ? roles : ""} />
+                            <ul>
+                                {roles &&
+                                    roles.map((role, i) => (
+                                        <li key={`my-${role}-${i}`}>
+                                            {role}{" "}
+                                            <FaDeleteLeft
+                                                onClick={() => {
+                                                    handleDelete(i, roles);
+                                                }}
+                                                color="red"
+                                                className="ms-2"
+                                                size={22}
+                                            />
+                                        </li>
+                                    ))}
+                            </ul>
+                            <Form.Select
+                                onChange={(e) => {
+                                    const selectedString = e.target.value;
+                                    impostaRuolo(selectedString, roles);
+                                }}
+                            >
+                                <option>Seleziona i ruoli</option>
+                                {AllRoles &&
+                                    AllRoles.map((role, i) => (
+                                        <option key={`option-${role}-${i}`} value={role}>
+                                            {role}{" "}
+                                        </option>
+                                    ))}
+                            </Form.Select>
                         </Form.Group>{" "}
+                        {/* statoUtente */}
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Stato Utente</Form.Label>
-                            <Form.Control value={isActive === false ? "Inattivo" : isActive === true ? "Attivo" : ""} />
+                            <Form.Check // prettier-ignore
+                                type="switch"
+                                id="custom-switch"
+                                label="Utente Attivo"
+                                checked={!!isActive}
+                                onChange={(e) => {
+                                    setIsActive(e.target.checked);
+                                }}
+                            />{" "}
                         </Form.Group>
+                        <Button type="submit">Modifica Utente</Button>
                     </Form>
                 </div>
+            </Col>
+            <Col>
+                <EsitoEditUser
+                    isSuccess={isSuccess}
+                    isError={isError}
+                    isLoading={isLoading}
+                    error={error}
+                    data={data}
+                />
             </Col>
         </>
     );

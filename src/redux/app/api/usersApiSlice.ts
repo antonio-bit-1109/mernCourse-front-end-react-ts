@@ -56,7 +56,7 @@ export const UsersApi = createApi({
             }),
         }),
         //PATCH
-        editUser: builder.mutation<string, IUser>({
+        editUser: builder.mutation<string, { id: string; username: string; roles: string[]; active: boolean }>({
             query: (dataEditUser) => ({
                 url: "/Users",
                 method: "PATCH",
