@@ -72,37 +72,43 @@ listenerMiddleware.startListening({
                 if (newAccessToken) {
                     listenerApi.dispatch(updateToken(newAccessToken));
                     // // se ricavo un nuovo token dalla fetch lo salvo di nuovo du redux e rifaccio la fetch che ha fallito a causa del token
-                    // console.log(action);
+                    console.log(action.meta);
 
                     // // const PossibleApi = {
                     // //     usersapi: UsersApi,
                     // //     notesapi: NotesApi,
                     // // };
 
-                    // const possibleEndpoints = {
-                    //     createNewUser: UsersApi.endpoints.createNewUser,
-                    //     getSingleUser: UsersApi.endpoints.getSingleUser,
-                    //     softDeleteUser: UsersApi.endpoints.softDeleteUser,
-                    //     editUser: UsersApi.endpoints.editUser,
-                    //     getAllUsers: UsersApi.endpoints.getAllUsers,
-                    //     changeImageProfile: UsersApi.endpoints.changeImageProfile,
-                    //     checkCompletedNote: NotesApi.endpoints.checkCompletedNote,
-                    //     createNewNote: NotesApi.endpoints.createNewNote,
-                    //     deleteNote: NotesApi.endpoints.deleteNote,
-                    //     editNote: NotesApi.endpoints.editNote,
-                    //     getAllUserNotes: NotesApi.endpoints.getAllUserNotes,
-                    //     getSingleNote: NotesApi.endpoints.getSingleNote,
-                    // };
+                    const possibleEndpoints = {
+                        createNewUser: UsersApi.endpoints.createNewUser,
+                        getSingleUser: UsersApi.endpoints.getSingleUser,
+                        softDeleteUser: UsersApi.endpoints.softDeleteUser,
+                        editUser: UsersApi.endpoints.editUser,
+                        getAllUsers: UsersApi.endpoints.getAllUsers,
+                        changeImageProfile: UsersApi.endpoints.changeImageProfile,
+                        checkCompletedNote: NotesApi.endpoints.checkCompletedNote,
+                        createNewNote: NotesApi.endpoints.createNewNote,
+                        deleteNote: NotesApi.endpoints.deleteNote,
+                        editNote: NotesApi.endpoints.editNote,
+                        getAllUserNotes: NotesApi.endpoints.getAllUserNotes,
+                        getSingleNote: NotesApi.endpoints.getSingleNote,
+                    };
 
-                    // const endpointName = action.meta.arg.endpointName;
-                    // const originalArgs = action.meta.arg.originalArgs;
-                    // // const apiSliceName = action.type.split("/")[0].toLowerCase();
+                    const endpointName = action.meta.arg.endpointName;
+                    console.log("endpointName", endpointName);
+                    const originalArgs = action.meta.arg.originalArgs;
+                    console.log("originalArgs", originalArgs);
 
-                    // if (possibleEndpoints[endpointName]) {
-                    //     await listenerApi.dispatch(possibleEndpoints[endpointName].initiate(originalArgs));
-                    // } else {
-                    //     console.error(`Endpoint ${endpointName} non trovato.`);
-                    // }
+                    const apiSliceName = action.type.split("/")[0].toLowerCase();
+                    console.log("apiSliceName", apiSliceName);
+
+                    if (endpointName && originalArgs && apiSliceName) {
+                        const fetchAgain = await listenerApi.dispatch(
+                            possibleEndpoints[endpointName].initiate(originalArgs)
+                        );
+                    } else {
+                        throw new Error("non hai definito per bene quale endpoint richiamare.");
+                    }
                 }
             } catch (err) {
                 console.error("Errore nel refresh del token", err);

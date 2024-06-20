@@ -16,7 +16,7 @@ const EditSingleUser = () => {
     const [username, setUsername] = useState<null | string>(null);
     const [roles, setRoles] = useState<null | string[]>(null);
     const [isActive, setIsActive] = useState<null | boolean>(null);
-
+    const [message, setMessage] = useState<null | string>(null);
     const [editUser, { isSuccess, isError, isLoading, error, data }] = useEditUserMutation();
     // const {
     //     register,
@@ -46,7 +46,8 @@ const EditSingleUser = () => {
             setRoles(newArray);
             return;
         }
-        console.log("ruolo già inserito.");
+        setMessage("ruolo già inserito.");
+
         return;
     };
     //
@@ -62,6 +63,16 @@ const EditSingleUser = () => {
             editUser({ id: id, username: username, roles: roles, active: isActive });
         }
     };
+
+    // quando viene mostrato il mesasge di ruolo gia inserito dopo 2sec sparisce
+    useEffect(() => {
+        if (message) {
+            setTimeout(() => {
+                setMessage(null);
+            }, 2000);
+        }
+    }, [message]);
+
     return (
         <>
             <Col>
@@ -131,6 +142,7 @@ const EditSingleUser = () => {
                                         </option>
                                     ))}
                             </Form.Select>
+                            {message && message}
                         </Form.Group>{" "}
                         {/* statoUtente */}
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
