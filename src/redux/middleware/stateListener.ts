@@ -70,7 +70,7 @@ listenerMiddleware.startListening({
                 const newAccessToken = await response.data.accessToken;
 
                 if (newAccessToken) {
-                    listenerApi.dispatch(updateToken(newAccessToken));
+                    await listenerApi.dispatch(updateToken(newAccessToken));
                     // // se ricavo un nuovo token dalla fetch lo salvo di nuovo du redux e rifaccio la fetch che ha fallito a causa del token
                     console.log(action.meta);
 
@@ -103,9 +103,7 @@ listenerMiddleware.startListening({
                     console.log("apiSliceName", apiSliceName);
 
                     if (endpointName && originalArgs && apiSliceName) {
-                        const fetchAgain = await listenerApi.dispatch(
-                            possibleEndpoints[endpointName].initiate(originalArgs)
-                        );
+                        await listenerApi.dispatch(possibleEndpoints[endpointName].initiate(originalArgs));
                     } else {
                         throw new Error("non hai definito per bene quale endpoint richiamare.");
                     }

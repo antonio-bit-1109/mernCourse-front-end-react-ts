@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { UsersApi } from "./app/api/usersApiSlice";
 import { TokenApi } from "./app/api/tokenApiSlice";
 import tokenReducer from "./app/traditionalSlices/tokenReducer";
@@ -18,26 +18,21 @@ import userReducer from "./app/traditionalSlices/userReducer";
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["accessToken"], // Nome del reducer che desideri persistere
-    // transform: [
-    //     expireReducer("token", {
-    //         expireSeconds: 60 * 60 * 24 * 7,
-    //         expiredState: { accessToken: null },
-    //         autoExpire: true,
-    //     }),
-    // ],
+    whitelist: ["token"], // Nome del reducer che desideri persistere
 };
 
-const persistedReducer = persistReducer(persistConfig, tokenReducer);
+const rootReducer = combineReducers({
+    token: tokenReducer,
+    user: userReducer,
+    [UsersApi.reducerPath]: UsersApi.reducer,
+    [TokenApi.reducerPath]: TokenApi.reducer,
+    [NotesApi.reducerPath]: NotesApi.reducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-    reducer: {
-        [UsersApi.reducerPath]: UsersApi.reducer,
-        [TokenApi.reducerPath]: TokenApi.reducer,
-        [NotesApi.reducerPath]: NotesApi.reducer,
-        token: persistedReducer,
-        user: userReducer,
-    },
+    reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
