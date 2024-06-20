@@ -89,7 +89,7 @@ export const UsersApi = createApi({
             }),
         }),
 
-        changeImageProfile: builder.mutation<any, { userId: string; StringImage: FormData }>({
+        changeImageProfile: builder.mutation<{ message: string }, { userId: string; StringImage: FormData }>({
             query: ({ userId, StringImage }) => ({
                 url: `Users/uploadUserImg/${userId}`,
                 method: "PATCH",

@@ -62,7 +62,7 @@ const FetchSingleUser = () => {
                         <Card className="position-relative" key={user._id}>
                             <Card.Body>
                                 <img
-                                    src={`${LocalHostPath}/imgs/${user.imageProfile}`}
+                                    src={`${LocalHostPath}/upload/${user.imageProfile}`}
                                     alt="immagine profilo"
                                     className=" img-thumbnail"
                                 />

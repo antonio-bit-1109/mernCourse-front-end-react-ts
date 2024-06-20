@@ -1,31 +1,56 @@
 import { Button, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { LocalHostPath } from "../../functions/LocalHostPath";
-import { useChangeImageProfileMutation } from "../../redux/app/api/usersApiSlice";
-import React, { useState } from "react";
+import { useChangeImageProfileMutation, useGetSingleUserMutation } from "../../redux/app/api/usersApiSlice";
+import React, { useEffect, useState } from "react";
+import EsitoUploadImgUser from "./EsitoUploadImgUser";
+import { setLoggedUser } from "../../redux/app/traditionalSlices/userReducer";
 const ChangeUserImgProfile = () => {
+    const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
     const { loggedUser } = useSelector((store: RootState) => store.user);
 
     const [changeImage, { isLoading, isSuccess, isError, data, error }] = useChangeImageProfileMutation();
+    const [getSingleUser, { data: dataUser }] = useGetSingleUserMutation();
     const [loadedImg, setLoadedImg] = useState<File | null>(null);
+    const [hasFetched, setHasFetched] = useState<boolean>(false);
+
     //  const [error] = useState<any>(null);
     //  const [data] = useState<any>(null);
 
     const handleChangeImg = async (e: React.FormEvent) => {
         e.preventDefault();
+
         if (loggedUser && loadedImg) {
             const formData = new FormData();
-            formData.append("imageProfile", loadedImg);
+            formData.append("file", loadedImg);
 
-            console.log("id utente", loggedUser._id);
-            console.log("immagine", loadedImg);
             await changeImage({ userId: loggedUser._id, StringImage: formData });
         }
     };
+
+    // se l'immagine viene uplodata con successo rifaccio la get per riavere le info dell userloggato
+    useEffect(() => {
+        if (data && loggedUser && !hasFetched) {
+            getSingleUser({ id: loggedUser._id });
+            setHasFetched(true);
+        }
+
+        return () => {
+            setHasFetched(false);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data, getSingleUser, loggedUser]);
+
+    useEffect(() => {
+        if (dataUser) {
+            dispatch(setLoggedUser(dataUser));
+            return;
+        }
+    }, [dataUser, dispatch]);
 
     return (
         <>
@@ -39,9 +64,18 @@ const ChangeUserImgProfile = () => {
                 </Button>
             </Col>
             <Col>
-                <div>
+                <div className="my-5">
                     {" "}
-                    <img src={`${LocalHostPath}/imgs/${loggedUser?.imageProfile}`} alt="immagine profilo corrente" />
+                    <img
+                        style={{
+                            height: "200px",
+                            width: "200px",
+                            objectFit: "cover",
+                        }}
+                        className="rounded-circle"
+                        src={`${LocalHostPath}/upload/${loggedUser?.imageProfile}`}
+                        alt="immagine profilo corrente"
+                    />
                 </div>
             </Col>
             <Col xs="10" md="6" lg="5">
@@ -67,6 +101,14 @@ const ChangeUserImgProfile = () => {
                     </Form>
                 </div>
             </Col>
+
+            <EsitoUploadImgUser
+                isLoading={isLoading}
+                isSuccess={isSuccess}
+                isError={isError}
+                data={data}
+                error={error}
+            />
         </>
     );
 };
