@@ -18,9 +18,6 @@ const ChangeUserImgProfile = () => {
     const [loadedImg, setLoadedImg] = useState<File | null>(null);
     const [hasFetched, setHasFetched] = useState<boolean>(false);
 
-    //  const [error] = useState<any>(null);
-    //  const [data] = useState<any>(null);
-
     const handleChangeImg = async (e: React.FormEvent) => {
         e.preventDefault();
 
