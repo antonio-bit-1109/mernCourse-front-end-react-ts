@@ -64,7 +64,7 @@ const FetchSingleUser = () => {
                                 <img
                                     src={`${LocalHostPath}/upload/${user.imageProfile}`}
                                     alt="immagine profilo"
-                                    className=" img-thumbnail"
+                                    className="imageStyle rounded rounded-circle"
                                 />
                                 <Card.Title>{user.username}</Card.Title>
                                 <Card.Text>{user.roles.join(", ")}</Card.Text>

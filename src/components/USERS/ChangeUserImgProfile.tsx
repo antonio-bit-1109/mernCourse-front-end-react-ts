@@ -64,12 +64,7 @@ const ChangeUserImgProfile = () => {
                 <div className="my-5">
                     {" "}
                     <img
-                        style={{
-                            height: "200px",
-                            width: "200px",
-                            objectFit: "cover",
-                        }}
-                        className="rounded-circle"
+                        className="rounded-circle imageStyle"
                         src={`${LocalHostPath}/upload/${loggedUser?.imageProfile}`}
                         alt="immagine profilo corrente"
                     />

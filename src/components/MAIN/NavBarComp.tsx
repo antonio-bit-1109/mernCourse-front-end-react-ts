@@ -20,7 +20,7 @@ const NavBarComp = () => {
                             onClick={() => {
                                 navigate("/");
                             }}
-                            src={LocalHostPath + "/imgs/default.png"}
+                            src={LocalHostPath + "/upload/default.png"}
                             width="30"
                             height="30"
                             className="d-inline-block align-top bg-light pointer"

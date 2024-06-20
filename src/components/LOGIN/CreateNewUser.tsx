@@ -71,7 +71,7 @@ const CreateNewUser = () => {
             <Col sm="10" md="5" xl="4">
                 <Button
                     onClick={() => {
-                        navigate("/singleUser");
+                        navigate(-1);
                     }}
                 >
                     {" "}

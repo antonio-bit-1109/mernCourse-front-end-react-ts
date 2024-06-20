@@ -52,7 +52,7 @@ const CreateNewNote = () => {
             <Col>
                 <Button
                     onClick={() => {
-                        navigate("/notes");
+                        navigate(-1);
                     }}
                 >
                     indietro
