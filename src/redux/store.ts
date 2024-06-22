@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage";
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import persistStore from "redux-persist/es/persistStore";
 import userReducer from "./app/traditionalSlices/userReducer";
+import listenerRefetchReducer from "./app/traditionalSlices/listenerRefetchReducer";
 // import expireReducer from "redux-persist-expire";
 
 const persistConfig = {
@@ -24,6 +25,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     token: tokenReducer,
     user: userReducer,
+    listenerRefetch: listenerRefetchReducer,
     [UsersApi.reducerPath]: UsersApi.reducer,
     [TokenApi.reducerPath]: TokenApi.reducer,
     [NotesApi.reducerPath]: NotesApi.reducer,

@@ -1,49 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LocalHostPath } from "../../../functions/LocalHostPath";
 import { RootState } from "../../store";
+import { ICreateNoteBody, IMessageResponse, INote, IbodyData } from "../../../interfaces/interfaces";
 //funzione del toolkit per scrivere delle fetch parametriche. e ritornare in automatico le risposte.
 
-export interface INote {
-    _id: string;
-    UserId: string;
-    title: string;
-    text: string;
-    isCompleted: boolean;
-    createdAt: string;
-    updatedAt: string;
-    ticket: number;
-    __v: number;
-}
-
-export interface IMessageResponse {
-    message: string;
-}
-
-export interface ICreateNoteBody {
-    userId: string;
-    bodyData: {
-        title: string;
-        text: string;
-    };
-}
-
-export interface IEditNoteBody {
-    userId: string;
-    bodyData: {
-        IdNote: string;
-        title: string;
-        text: string;
-    };
-}
-
-export interface IbodyData {
-    userId: string;
-    bodyData: {
-        titleBody: string;
-        textBody: string;
-        IdNote: string;
-    };
-}
 // builder.query/mutation< RISPOSTA DELL API all EVENTO FULLFILLED   ,   PARAMETRO che si aspetta la query/mutation  >
 
 export const NotesApi = createApi({

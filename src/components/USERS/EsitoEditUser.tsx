@@ -1,5 +1,7 @@
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 export interface ITypeResponse {
     isSuccess: boolean;
@@ -15,6 +17,8 @@ export interface ITypeError {
 }
 
 const EsitoEditUser = ({ isSuccess, isError, isLoading, error, data }: ITypeResponse) => {
+    const { responseToEditSingleUserRefetch_listener } = useSelector((store: RootState) => store.listenerRefetch);
+
     if (isSuccess) {
         if (data && "message" && data.message) {
             return <div>{data.message}</div>;
@@ -28,6 +32,10 @@ const EsitoEditUser = ({ isSuccess, isError, isLoading, error, data }: ITypeResp
     }
 
     if (isError) {
+        if (responseToEditSingleUserRefetch_listener) {
+            return <div>{responseToEditSingleUserRefetch_listener}</div>;
+        }
+
         if (error && "data" in error) {
             const myError = error as ITypeError;
             return <div>{myError.data.message}</div>;

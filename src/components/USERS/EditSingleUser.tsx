@@ -18,13 +18,6 @@ const EditSingleUser = () => {
     const [isActive, setIsActive] = useState<null | boolean>(null);
     const [message, setMessage] = useState<null | string>(null);
     const [editUser, { isSuccess, isError, isLoading, error, data }] = useEditUserMutation();
-    // const {
-    //     register,
-    //     handleSubmit,
-    //     formState: { errors },
-    //     watch,
-    //     reset,
-    // } = useForm();
 
     useEffect(() => {
         if (userToEdit) {
@@ -59,7 +52,7 @@ const EditSingleUser = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (username && id && Array.isArray(roles) && isActive) {
+        if (username && id && Array.isArray(roles) && isActive !== null) {
             editUser({ id: id, username: username, roles: roles, active: isActive });
         }
     };

@@ -3,7 +3,7 @@ import { useDeleteNoteMutation, useGetAllUserNotesQuery } from "../../redux/app/
 import { RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { ICustomError, IDecodedTokenStructure } from "../../interfaces/interfaces";
+import { ICustomError, IDecodedTokenStructure, INote } from "../../interfaces/interfaces";
 import { Button, Card, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -13,8 +13,19 @@ const VIsualizzaNote = () => {
     const { accessToken } = useSelector((store: RootState) => store.token);
     const [userId, setUserId] = useState<string>("");
 
-    const { data: notes, error, isLoading, refetch } = useGetAllUserNotesQuery(userId, { skip: !userId });
+    const {
+        data: notes,
+        isError,
+        error,
+        isLoading,
+        refetch,
+    } = useGetAllUserNotesQuery(userId, { skip: !userId, refetchOnMountOrArgChange: true });
     const [deleteNoteFetch, { isSuccess: delIsSuccess, isError: delIsError }] = useDeleteNoteMutation();
+    const [allUserNotes, setAllUserNotes] = useState<null | INote[]>(null);
+
+    // risposta della seconda fetch rieffettuata refreshando prima il token e poi portando la risposta nel componente per essere mappata
+    const { responseToGetAllNotesRefetch_listener } = useSelector((store: RootState) => store.listenerRefetch);
+    const [isListenerFetchHappened, setIsListenerFetchHappened] = useState(false);
 
     const decriptToken = (token: string) => {
         const decodedToken: IDecodedTokenStructure = jwtDecode(token);
@@ -28,21 +39,22 @@ const VIsualizzaNote = () => {
             return;
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (userId) {
-            refetch();
-        }
-    }, [userId, refetch]);
-
-    useEffect(() => {
-        if (accessToken) {
-            const userIdDecripted = decriptToken(accessToken);
-            setUserId(userIdDecripted);
-            return;
-        }
     }, [accessToken]);
+
+    // useEffect(() => {
+    //     if (userId) {
+    //         refetch();
+    //         return;
+    //     }
+    // }, [userId, refetch]);
+
+    // useEffect(() => {
+    //     if (accessToken) {
+    //         const userIdDecripted = decriptToken(accessToken);
+    //         setUserId(userIdDecripted);
+    //         return;
+    //     }
+    // }, [accessToken]);
 
     useEffect(() => {
         if (delIsSuccess) {
@@ -53,11 +65,81 @@ const VIsualizzaNote = () => {
         }
     }, [delIsSuccess, refetch, delIsError]);
 
+    useEffect(() => {
+        if (notes && notes.length > 0 && !responseToGetAllNotesRefetch_listener) {
+            setIsListenerFetchHappened(false);
+            setAllUserNotes(notes);
+            return;
+        }
+
+        if (responseToGetAllNotesRefetch_listener && responseToGetAllNotesRefetch_listener.length > 0 && !notes) {
+            setAllUserNotes(responseToGetAllNotesRefetch_listener);
+            setIsListenerFetchHappened(true);
+            return;
+        }
+
+        return () => {
+            setIsListenerFetchHappened(false);
+        };
+    }, [notes, responseToGetAllNotesRefetch_listener]);
+
     const deleteNote = async (idNote: string) => {
         await deleteNoteFetch({ IdNote: idNote, UserId: userId });
     };
 
-    if (error) {
+    if (isError) {
+        if (isListenerFetchHappened) {
+            return (
+                <>
+                    <div>
+                        {" "}
+                        <Button
+                            onClick={() => {
+                                navigate(-1);
+                            }}
+                        >
+                            indietro
+                        </Button>
+                    </div>{" "}
+                    <Col xs="10" md="8" lg="6" xl="4">
+                        {allUserNotes &&
+                            allUserNotes.map((note) => (
+                                <Card key={`${note._id}`}>
+                                    <FaRegTrashAlt
+                                        onClick={() => {
+                                            deleteNote(note._id);
+                                        }}
+                                        size={30}
+                                        color="red"
+                                        className="absolute-position-0 pointer"
+                                    />
+                                    <Card.Body>
+                                        <Card.Title>{note.title}</Card.Title>
+                                        <Card.Text>{note.text}</Card.Text>
+                                        <Card.Text>
+                                            Stato nota :{" "}
+                                            {note.isCompleted ? (
+                                                <span className="text-success fw-bold">completato</span>
+                                            ) : (
+                                                <span className="text-danger fw-bold"> non completato</span>
+                                            )}
+                                        </Card.Text>
+                                        <Button
+                                            onClick={() => {
+                                                navigate(`/singleNote/${note._id}`);
+                                            }}
+                                            variant="primary"
+                                        >
+                                            More Info
+                                        </Button>
+                                    </Card.Body>
+                                </Card>
+                            ))}
+                    </Col>
+                </>
+            );
+        }
+
         const CustomError = error as ICustomError;
         if (CustomError.data) {
             return (
@@ -65,7 +147,7 @@ const VIsualizzaNote = () => {
                     {" "}
                     <Button
                         onClick={() => {
-                            navigate("/singleUser");
+                            navigate(-1);
                         }}
                     >
                         indietro
@@ -88,11 +170,12 @@ const VIsualizzaNote = () => {
             );
         }
     }
+
     if (isLoading) {
         return <div>caricamento...</div>;
     }
 
-    if (notes && notes.length > 0) {
+    if (allUserNotes && allUserNotes.length > 0) {
         return (
             <>
                 {" "}
@@ -107,7 +190,7 @@ const VIsualizzaNote = () => {
                     </Button>
                 </Col>
                 <Col xs="10" md="8" lg="6" xl="4">
-                    {notes.map((note) => (
+                    {allUserNotes.map((note) => (
                         <Card key={`${note._id}`}>
                             <FaRegTrashAlt
                                 onClick={() => {

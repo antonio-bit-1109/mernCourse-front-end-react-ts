@@ -14,7 +14,7 @@ const CreateNewNote = () => {
     const { accessToken } = useSelector((store: RootState) => store.token);
     const [decriptedUserID, setDecriptedUserID] = useState<string | null>(null);
 
-    const [createNewNote, { isError, isLoading, isSuccess, data }] = useCreateNewNoteMutation();
+    const [createNewNote, { isError, isLoading, isSuccess, data, error }] = useCreateNewNoteMutation();
 
     useEffect(() => {
         if (accessToken) {
@@ -24,7 +24,7 @@ const CreateNewNote = () => {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [accessToken]);
 
     const decriptToken = (string: string) => {
         const decriptedToken: IDecodedTokenStructure = jwtDecode(string);
@@ -102,7 +102,13 @@ const CreateNewNote = () => {
                     <Button variant="primary" type="submit">
                         Submit
                     </Button>
-                    <EsitoCreateNewNote isError={isError} isLoading={isLoading} isSuccess={isSuccess} data={data} />
+                    <EsitoCreateNewNote
+                        isError={isError}
+                        isLoading={isLoading}
+                        isSuccess={isSuccess}
+                        data={data}
+                        error={error}
+                    />
                 </Form>
             </Col>
         </>

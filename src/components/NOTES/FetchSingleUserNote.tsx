@@ -1,4 +1,4 @@
-import { Button, Col } from "react-bootstrap";
+import { Button, Card, Col } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetSingleNoteMutation } from "../../redux/app/api/notesApiSlice";
 import { useSelector } from "react-redux";
@@ -20,7 +20,8 @@ const FetchSingleNote = () => {
     const [text, setText] = useState<string>("");
 
     // hook per fare la fetch per recuperare singola nota
-    const [getSingleNote, { data: nota, error, isLoading }] = useGetSingleNoteMutation();
+    const [getSingleNote, { data: nota, error, isLoading, isError }] = useGetSingleNoteMutation();
+    const { responseToGetSingleNoteRefetch_listener } = useSelector((store: RootState) => store.listenerRefetch);
 
     const decodingToken = useCallback(
         function () {
@@ -54,7 +55,7 @@ const FetchSingleNote = () => {
     }, [decodingToken, param.idNote, idUser, getSingleNote, asyncActions]);
 
     const goBack = () => {
-        navigate("/notes");
+        navigate(-1);
     };
 
     const ShowEditForm = async () => {
@@ -65,11 +66,11 @@ const FetchSingleNote = () => {
         }
     };
 
-    if (error) {
+    if (isError) {
         return (
             <div>
                 <Button onClick={goBack}>torna indietro </Button>
-                errore nel reperimetno della nota.
+                <p>{error.data.message}</p>
             </div>
         );
     }
@@ -83,25 +84,27 @@ const FetchSingleNote = () => {
         );
     }
 
-    if (nota) {
+    if (nota || responseToGetSingleNoteRefetch_listener) {
         console.log(nota);
         return (
             <div className="d-flex flex-column align-items-center justify-content-center">
                 <Col xs="10" md="5">
                     <Button onClick={goBack}>torna indietro </Button>
-                    <div className=" border border-2 d-flex flex-column align-items-center mt-5 position-relative p-4">
+                    <Card className=" border border-2 d-flex flex-column align-items-center mt-5 position-relative p-4">
                         <FaPen onClick={ShowEditForm} className="position-absolute customPOsition pointer" />
-                        <p className="text-center">nota N° {nota.ticket}</p>
-                        <h3 className="text-center">{nota.title}</h3>
-                        <h4 className="text-center">{nota.text}</h4>
+                        <p className="text-center">
+                            nota N° {nota?.ticket || responseToGetSingleNoteRefetch_listener?.ticket}
+                        </p>
+                        <h3 className="text-center">{nota?.title || responseToGetSingleNoteRefetch_listener?.title}</h3>
+                        <h4 className="text-center">{nota?.text || responseToGetSingleNoteRefetch_listener?.text}</h4>
                         <p>
-                            {nota.isCompleted ? (
+                            {nota?.isCompleted || responseToGetSingleNoteRefetch_listener?.isCompleted ? (
                                 <span className="text-success fw-bold">completato</span>
                             ) : (
                                 <span className="text-danger fw-bold"> non completato</span>
                             )}{" "}
                         </p>
-                    </div>
+                    </Card>
                 </Col>
 
                 <FormEditNote

@@ -39,3 +39,80 @@ export interface ICustomError extends SerializedError {
         message: string;
     };
 }
+
+export interface INote {
+    _id: string;
+    UserId: string;
+    title: string;
+    text: string;
+    isCompleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    ticket: number;
+    __v: number;
+}
+
+export interface IMessageResponse {
+    message: string;
+}
+
+export interface ICreateNoteBody {
+    userId: string;
+    bodyData: {
+        title: string;
+        text: string;
+    };
+}
+
+export interface IEditNoteBody {
+    userId: string;
+    bodyData: {
+        IdNote: string;
+        title: string;
+        text: string;
+    };
+}
+
+export interface IbodyData {
+    userId: string;
+    bodyData: {
+        titleBody: string;
+        textBody: string;
+        IdNote: string;
+    };
+}
+
+export interface Itoken {
+    accessToken: string;
+}
+
+export interface DataAutentication {
+    usernameBody: string;
+    passwordBody: string;
+}
+
+export interface IUser {
+    _id: string;
+    username: string;
+    roles: string[];
+    active: boolean;
+    __v: number;
+    imageProfile: string;
+}
+
+export interface ICreateUserBody {
+    username: string;
+    password: string;
+    roles: string[];
+}
+
+export interface Ireply {
+    message: string;
+}
+
+export interface IresponseListenerUser {
+    _id: string;
+    username: string;
+    active: boolean;
+    __v: number;
+}

@@ -1,33 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LocalHostPath } from "../../../functions/LocalHostPath";
 import { RootState } from "../../store";
+import { ICreateUserBody, IUser, Ireply } from "../../../interfaces/interfaces";
 // import { SerializedError } from "@reduxjs/toolkit";
 // import { useSelector } from "react-redux";
 // import Header from "../../../components/MAIN/Header";
 //funzione del toolkit per scrivere delle fetch parametriche. e ritornare in automatico le risposte.
-
-export interface IUser {
-    _id: string;
-    username: string;
-    roles: string[];
-    active: boolean;
-    __v: number;
-    imageProfile: string;
-}
-
-export interface ICreateUserBody {
-    username: string;
-    password: string;
-    roles: string[];
-}
-
-export interface Ireply {
-    message: string;
-}
-
-// export type SuccessResponse = IUser[];
-// export type ErrorResponse = FetchBaseQueryError | SerializedError;
-// export type QueryResponse = SuccessResponse | ErrorResponse;
 
 // builder.query/mutation< RISPOSTA DELL API IN CASO DI SUCCESSO  ,   PARAMETRO che si aspetta la query   >
 
